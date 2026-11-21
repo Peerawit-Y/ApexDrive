@@ -5,11 +5,10 @@ import { Product } from '../types/product';
 import {
   Zap,
   Timer,
-  Disc,
+  Gauge,
   ArrowLeft,
   Scale,
   ShoppingBag,
-  Sparkles,
   ExternalLink,
   ShieldCheck,
   Check,
@@ -21,30 +20,28 @@ interface ProductDetailProps {
   cartIds: string[];
   onToggleCompare: (product: Product) => void;
   onAddToCart: (product: Product) => void;
-  onAskCarAI: (carName: string) => void;
 }
 
 export const ProductDetail: React.FC<ProductDetailProps> = ({
   compareIds,
   cartIds,
   onToggleCompare,
-  onAddToCart,
-  onAskCarAI
+  onAddToCart
 }) => {
   const { id } = useParams<{ id: string }>();
   const product = id ? getProductById(id) : undefined;
 
   if (!product) {
     return (
-      <div className="bg-brand-card p-12 rounded-2xl border border-brand-border text-center max-w-lg mx-auto my-12 space-y-4">
+      <div className="glass-panel p-12 rounded-3xl text-center max-w-lg mx-auto my-12 space-y-4">
         <h3 className="text-xl font-bold text-white">ไม่พบข้อมูลรถยนต์รุ่นนี้</h3>
-        <p className="text-xs text-slate-400">กรุณาตรวจสอบรหัสรถยนต์ หรือกลับไปยังหน้ารายการสินค้า</p>
+        <p className="text-xs text-slate-400 font-mono">กรุณาตรวจสอบรหัสรถยนต์ หรือกลับไปยังหน้ารายการสินค้า</p>
         <Link
           to="/products"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 text-white text-xs font-semibold"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-rose-600 text-white text-xs font-mono font-bold uppercase tracking-wider"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>กลับไปยัง Catalog</span>
+          <span>กลับสู่โชว์รูม</span>
         </Link>
       </div>
     );
@@ -54,15 +51,15 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
   const isInCart = cartIds.includes(product.id);
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       
       {/* Back Link */}
       <Link
         to="/products"
-        className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+        className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-slate-400 hover:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        <span>กลับไปยังรายการรถยนต์ทั้งหมด</span>
+        <span>กลับสู่คลังรถยนต์ทั้งหมด</span>
       </Link>
 
       {/* Main Grid: Gallery + Core Info */}
@@ -70,23 +67,26 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
         
         {/* Left: Car Media */}
         <div className="space-y-4">
-          <div className="relative rounded-3xl overflow-hidden border border-brand-border bg-slate-900 shadow-2xl h-[380px] sm:h-[460px]">
+          <div className="relative rounded-3xl overflow-hidden bg-[#0A0D14] shadow-2xl h-[380px] sm:h-[460px]">
             <img
               src={product.image}
               alt={`${product.brand} ${product.model}`}
               className="w-full h-full object-cover"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
+            
             <div className="absolute top-4 left-4 flex gap-2">
-              <span className="px-3 py-1 rounded-lg text-xs font-bold bg-black/80 backdrop-blur-md text-white border border-white/10 uppercase">
+              <span className="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-black/70 backdrop-blur-md text-white uppercase">
                 {product.brand}
               </span>
-              <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-rose-600 text-white">
-                {product.year}
+              <span className="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-rose-600 text-white">
+                MY{product.year}
               </span>
             </div>
-            <div className="absolute bottom-4 left-4 right-4 bg-black/70 backdrop-blur-md p-3 rounded-2xl border border-white/10 flex items-center justify-between text-xs text-slate-300">
-              <span>ตลาด: {product.market}</span>
-              <span className="font-semibold text-amber-300">ระบบขับเคลื่อน {product.drivetrain}</span>
+
+            <div className="absolute bottom-4 left-4 right-4 bg-black/75 backdrop-blur-md p-3.5 rounded-2xl flex items-center justify-between text-xs font-mono text-slate-300">
+              <span>MARKET: {product.market.toUpperCase()}</span>
+              <span className="font-bold text-amber-300">{product.drivetrain} DRIVETRAIN</span>
             </div>
           </div>
         </div>
@@ -94,52 +94,56 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
         {/* Right: Pricing, Specs, and Actions */}
         <div className="space-y-6 flex flex-col justify-between">
           <div>
-            <div className="text-xs font-bold text-rose-500 uppercase tracking-widest">
+            <div className="text-xs font-mono font-bold text-rose-500 uppercase tracking-widest">
               {product.category}
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-white mt-1">
               {product.brand} {product.model}
             </h1>
-            <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+            <p className="text-sm text-slate-300 mt-3 leading-relaxed font-normal">
               {product.description}
             </p>
           </div>
 
           {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-3 gap-3 p-4 bg-brand-card rounded-2xl border border-brand-border">
+          <div className="grid grid-cols-3 gap-3 p-4 bg-[#0E121B] rounded-2xl shadow-lg">
             <div className="text-center">
-              <div className="flex items-center justify-center gap-1 text-amber-400 text-xs font-semibold mb-1">
-                <Zap className="w-4 h-4" />
-                <span>พละกำลัง</span>
+              <div className="flex items-center justify-center gap-1 text-amber-400 text-[10px] font-mono font-semibold uppercase mb-1">
+                <Zap className="w-3.5 h-3.5" />
+                <span>HORSEPOWER</span>
               </div>
-              <div className="text-xl sm:text-2xl font-extrabold text-white">{product.horsepower} HP</div>
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white">{product.horsepower} <span className="text-xs text-slate-400">HP</span></div>
             </div>
-            <div className="text-center border-x border-brand-border">
-              <div className="flex items-center justify-center gap-1 text-rose-400 text-xs font-semibold mb-1">
-                <Timer className="w-4 h-4" />
-                <span>0-100 กม./ชม.</span>
-              </div>
-              <div className="text-xl sm:text-2xl font-extrabold text-white">{product.acceleration_0_100_sec}s</div>
-            </div>
+            
             <div className="text-center">
-              <div className="flex items-center justify-center gap-1 text-cyan-400 text-xs font-semibold mb-1">
-                <Disc className="w-4 h-4" />
-                <span>Top Speed</span>
+              <div className="flex items-center justify-center gap-1 text-rose-400 text-[10px] font-mono font-semibold uppercase mb-1">
+                <Timer className="w-3.5 h-3.5" />
+                <span>0-100 KM/H</span>
               </div>
-              <div className="text-xl sm:text-2xl font-extrabold text-white">{product.top_speed_kmh} km/h</div>
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white">{product.acceleration_0_100_sec} <span className="text-xs text-slate-400">s</span></div>
+            </div>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 text-cyan-400 text-[10px] font-mono font-semibold uppercase mb-1">
+                <Gauge className="w-3.5 h-3.5" />
+                <span>TOP SPEED</span>
+              </div>
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white">{product.top_speed_kmh} <span className="text-xs text-slate-400">km/h</span></div>
             </div>
           </div>
 
           {/* Price Box */}
-          <div className="p-5 bg-gradient-to-r from-rose-950/30 to-brand-card rounded-2xl border border-rose-900/40 flex items-center justify-between">
+          <div className="p-5 bg-gradient-to-r from-rose-950/40 via-[#12151E] to-[#0A0D14] rounded-2xl shadow-xl flex items-center justify-between">
             <div>
-              <span className="text-xs text-slate-400 block uppercase tracking-wider">ราคาจำหน่ายโดยประมาณ (จำลอง)</span>
-              <div className="text-2xl sm:text-3xl font-black text-white mt-0.5">
-                ฿{product.price.toLocaleString()} <span className="text-xs font-medium text-slate-400">{product.currency}</span>
+              <span className="text-[10px] font-mono text-slate-400 block uppercase tracking-widest">
+                ราคาจำหน่ายอย่างเป็นทางการ (OFFICIAL MSRP)
+              </span>
+              <div className="text-2xl sm:text-3xl font-mono font-black text-white mt-0.5">
+                ฿{product.price.toLocaleString()} <span className="text-xs font-normal text-slate-400">{product.currency}</span>
               </div>
             </div>
-            <div className="text-right text-[11px] text-amber-400 bg-amber-950/40 border border-amber-900/60 px-3 py-1 rounded-lg">
-              Education Simulation
+            <div className="text-right text-[10px] font-mono text-emerald-400 bg-emerald-500/15 px-3 py-1.5 rounded-lg">
+              THAILAND OFFICIAL
             </div>
           </div>
 
@@ -148,37 +152,28 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => onAddToCart(product)}
-                className={`py-3.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border transition-all ${
+                className={`py-3.5 px-4 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
                   isInCart
-                    ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/50'
-                    : 'bg-rose-600 hover:bg-rose-500 text-white border-transparent shadow-lg shadow-rose-950/40'
+                    ? 'bg-emerald-600/25 text-emerald-300'
+                    : 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-950/40 hover:scale-105 active:scale-95'
                 }`}
               >
                 {isInCart ? <Check className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
-                <span>{isInCart ? 'อยู่ในตะกร้าจำลองแล้ว' : 'ใส่ตะกร้าสินค้าจำลอง'}</span>
+                <span>{isInCart ? 'อยู่ในตะกร้าแล้ว' : 'เพิ่มลงตะกร้า'}</span>
               </button>
 
               <button
                 onClick={() => onToggleCompare(product)}
-                className={`py-3.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border transition-all ${
+                className={`py-3.5 px-4 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
                   isCompared
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700/60'
+                    ? 'bg-amber-500/20 text-amber-300'
+                    : 'bg-white/[0.06] hover:bg-white/[0.12] text-slate-200'
                 }`}
               >
                 <Scale className="w-4 h-4" />
-                <span>{isCompared ? 'นำออกจากการเปรียบเทียบ' : 'เพิ่มเพื่อเปรียบเทียบ'}</span>
+                <span>{isCompared ? 'นำออกจากการเทียบ' : 'เพิ่มในตารางเทียบ'}</span>
               </button>
             </div>
-
-            {/* AI Assistant Quick Inquiry */}
-            <button
-              onClick={() => onAskCarAI(`${product.brand} ${product.model}`)}
-              className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-brand-border text-xs font-semibold text-rose-300 hover:text-rose-200 flex items-center justify-center gap-2 transition-colors"
-            >
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>ถาม RAG AI Specialist เกี่ยวกับ {product.brand} {product.model} คันนี้</span>
-            </button>
           </div>
         </div>
 
@@ -188,9 +183,9 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-6">
         
         {/* Key Highlights */}
-        <div className="bg-brand-card p-6 sm:p-8 rounded-3xl border border-brand-border space-y-4">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-rose-500" />
+        <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-4 bg-[#0E121B]/90 shadow-xl">
+          <h3 className="text-sm font-mono font-bold text-white flex items-center gap-2 uppercase tracking-wider">
+            <ShieldCheck className="w-4 h-4 text-rose-500" />
             <span>จุดเด่นทางวิศวกรรม (Engineering Highlights)</span>
           </h3>
           <ul className="space-y-3 text-xs text-slate-300">
@@ -204,34 +199,34 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
         </div>
 
         {/* Detailed Specs Table */}
-        <div className="bg-brand-card p-6 sm:p-8 rounded-3xl border border-brand-border space-y-4">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Info className="w-5 h-5 text-amber-400" />
+        <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-4 bg-[#0E121B]/90 shadow-xl">
+          <h3 className="text-sm font-mono font-bold text-white flex items-center gap-2 uppercase tracking-wider">
+            <Info className="w-4 h-4 text-amber-400" />
             <span>ข้อมูลจำเพาะทางเทคนิค (Technical Specifications)</span>
           </h3>
-          <div className="divide-y divide-brand-border text-xs">
-            <div className="py-2.5 flex justify-between">
-              <span className="text-slate-400">เครื่องยนต์ (Engine)</span>
+          <div className="text-xs font-mono space-y-2">
+            <div className="py-2 px-3 rounded-lg bg-white/[0.02] flex justify-between">
+              <span className="text-slate-400">ENGINE</span>
               <span className="text-white font-semibold text-right">{product.engine}</span>
             </div>
-            <div className="py-2.5 flex justify-between">
-              <span className="text-slate-400">แรงบิดสูงสุด (Torque)</span>
+            <div className="py-2 px-3 rounded-lg flex justify-between">
+              <span className="text-slate-400">MAX TORQUE</span>
               <span className="text-white font-semibold">{product.torque_nm} Nm</span>
             </div>
-            <div className="py-2.5 flex justify-between">
-              <span className="text-slate-400">ระบบส่งกำลัง (Transmission)</span>
+            <div className="py-2 px-3 rounded-lg bg-white/[0.02] flex justify-between">
+              <span className="text-slate-400">TRANSMISSION</span>
               <span className="text-white font-semibold">{product.transmission}</span>
             </div>
-            <div className="py-2.5 flex justify-between">
-              <span className="text-slate-400">ระบบขับเคลื่อน (Drivetrain)</span>
+            <div className="py-2 px-3 rounded-lg flex justify-between">
+              <span className="text-slate-400">DRIVETRAIN</span>
               <span className="text-amber-300 font-semibold">{product.drivetrain}</span>
             </div>
-            <div className="py-2.5 flex justify-between">
-              <span className="text-slate-400">จำนวนที่นั่ง (Seats)</span>
+            <div className="py-2 px-3 rounded-lg bg-white/[0.02] flex justify-between">
+              <span className="text-slate-400">CABIN SEATING</span>
               <span className="text-white font-semibold">{product.seats} ที่นั่ง</span>
             </div>
-            <div className="py-2.5 flex justify-between">
-              <span className="text-slate-400">ประเภทเชื้อเพลิง (Fuel Type)</span>
+            <div className="py-2 px-3 rounded-lg flex justify-between">
+              <span className="text-slate-400">FUEL TYPE</span>
               <span className="text-white font-semibold">{product.fuel_type}</span>
             </div>
           </div>
@@ -240,8 +235,8 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
       </div>
 
       {/* Sources & Citations */}
-      <div className="bg-slate-900/60 p-5 rounded-2xl border border-brand-border text-xs space-y-2">
-        <span className="text-slate-400 font-semibold flex items-center gap-1.5">
+      <div className="bg-[#0A0D14] p-6 rounded-2xl text-xs font-mono space-y-2 shadow-lg">
+        <span className="text-slate-400 font-bold flex items-center gap-1.5 uppercase tracking-wider">
           <ExternalLink className="w-3.5 h-3.5 text-rose-400" />
           <span>แหล่งข้อมูลอ้างอิงอย่างเป็นทางการ (Official Sources):</span>
         </span>

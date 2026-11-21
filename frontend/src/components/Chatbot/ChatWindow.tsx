@@ -3,7 +3,7 @@ import { ChatMessage as ChatMessageType } from '../../types/product';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { askChatbot } from '../../services/chatbotService';
-import { Sparkles, X, RotateCcw, Settings2, ShieldCheck, Loader2 } from 'lucide-react';
+import { X, RotateCcw, Settings2, ShieldCheck, Loader2, Gauge } from 'lucide-react';
 
 interface ChatWindowProps {
   isOpen: boolean;
@@ -15,8 +15,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
     {
       id: 'init-1',
       sender: 'assistant',
-      content: 'สวัสดีครับ! ผมคือ **ApexDrive AI Specialist** ผู้ช่วยวิเคราะห์ข้อมูลรถสปอร์ตและซูเปอร์คาร์ ขับเคลื่อนด้วย Google Gemini พร้อมระบบค้นหา RAG จากคลังข้อมูลสเปกของเรา\n\nสามารถสอบถามเรื่องสเปก พละกำลัง ความแตกต่าง หรือขอคำแนะนำการเลือกรถได้เลยครับ!',
-      sources: ['ApexDrive Verified Knowledge Base'],
+      content: 'สวัสดีครับ ยินดีต้อนรับสู่ **Apex Co-Pilot Telemetry**\n\nผมพร้อมให้คำปรึกษาเชิงวิเคราะห์สเปก พละกำลังเครื่องยนต์ อัตราเร่ง ระบบขับเคลื่อน (RWD/AWD) หรือการเปรียบเทียบซูเปอร์คาร์ในโชว์รูมของเรา โดยอ้างอิงจากฐานข้อมูลวิศวกรรมที่ผ่านการตรวจสอบจริง\n\nท่านสนใจวิเคราะห์รถรุ่นใดเป็นพิเศษไหมครับ?',
+      sources: ['ApexDrive Technical Knowledge Base MY2024-2025'],
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -65,7 +65,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
       const errorMsg: ChatMessageType = {
         id: `err-${Date.now()}`,
         sender: 'assistant',
-        content: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ Gemini API กรุณาลองใหม่อีกครั้งครับ',
+        content: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับระบบ Telemetry กรุณาลองใหม่อีกครั้งครับ',
         sources: [],
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
@@ -80,30 +80,35 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
       {
         id: `init-${Date.now()}`,
         sender: 'assistant',
-        content: 'เริ่มการสนทนาใหม่แล้วครับ สอบถามข้อมูลรถยนต์สปอร์ตที่ท่านสนใจได้เลยครับ!',
-        sources: ['ApexDrive Verified Knowledge Base'],
+        content: 'รีเซ็ตระบบ Telemetry เรียบร้อยแล้วครับ สอบถามข้อมูลรถยนต์สปอร์ตที่ท่านสนใจได้เลยครับ!',
+        sources: ['ApexDrive Technical Knowledge Base MY2024-2025'],
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 w-full max-w-md bg-brand-card rounded-2xl border border-brand-border shadow-2xl flex flex-col overflow-hidden max-h-[82vh] h-[640px] animate-in slide-in-from-bottom-6 duration-300">
+    <div className="fixed bottom-5 right-5 z-50 w-full max-w-md bg-[#0D1017] rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[82vh] h-[640px] animate-in slide-in-from-bottom-6 duration-300">
       
-      {/* Header */}
-      <div className="p-4 bg-gradient-to-r from-slate-900 to-slate-800 border-b border-brand-border flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center shadow-md">
-            <Sparkles className="w-5 h-5 text-white animate-pulse" />
+      {/* Pit-Wall Header */}
+      <div className="p-4 bg-black/40 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-black/50 flex items-center justify-center">
+            <Gauge className="w-5 h-5 text-rose-500" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <span>ApexDrive AI Specialist</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-            </h4>
-            <p className="text-[10px] text-slate-400 flex items-center gap-1">
+            <div className="flex items-center gap-2">
+              <h4 className="text-xs font-mono font-bold text-white tracking-wider">
+                APEX CO-PILOT
+              </h4>
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+              </span>
+            </div>
+            <p className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5 mt-0.5">
               <ShieldCheck className="w-3 h-3 text-rose-400" />
-              <span>Gemini File Search RAG</span>
+              <span>TELEMETRY RAG // VERIFIED</span>
             </p>
           </div>
         </div>
@@ -111,21 +116,21 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
         <div className="flex items-center gap-1">
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
             title="ตั้งค่า API Endpoint"
           >
             <Settings2 className="w-4 h-4" />
           </button>
           <button
             onClick={handleClearHistory}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
             title="ล้างบทสนทนา"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
             title="ปิดหน้าต่าง"
           >
             <X className="w-4 h-4" />
@@ -135,9 +140,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
 
       {/* Settings Bar (Expandable) */}
       {showSettings && (
-        <div className="p-3 bg-slate-950 border-b border-slate-800 text-xs space-y-2">
+        <div className="p-3 bg-black/90 text-xs space-y-2 font-mono">
           <div className="flex items-center justify-between font-semibold text-slate-300">
-            <span>Secure Cloud API Endpoint (Optional)</span>
+            <span>Secure Cloud API Endpoint</span>
             <span className="text-[10px] text-emerald-400">RAG Ready</span>
           </div>
           <input
@@ -145,35 +150,35 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
             value={apiEndpoint}
             onChange={(e) => setApiEndpoint(e.target.value)}
             placeholder="เช่น https://your-cloud-run-api/chat"
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-500"
+            className="w-full bg-[#12151E] rounded-xl px-3 py-2 text-xs text-slate-200 placeholder-slate-500 font-mono focus:outline-none focus:ring-1 focus:ring-rose-500"
           />
           <p className="text-[10px] text-slate-400 leading-tight">
-            *เมื่อเว้นว่าง ระบบจะทำงานในโหมด Offline Knowledge Base Matcher (ไม่เปิดเผย API Key ใน Frontend ตามเกณฑ์ความปลอดภัย)
+            *เมื่อเว้นว่าง ระบบจะทำงานในโหมด Offline Knowledge Base Matcher (ปลอดภัยและไม่เปิดเผย API Key ใน Frontend)
           </p>
         </div>
       )}
 
       {/* Messages Scroll Area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-brand-dark/50">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#08090C]">
         {messages.map((m) => (
           <ChatMessage key={m.id} message={m} />
         ))}
         {isLoading && (
-          <div className="flex items-center gap-2 text-xs text-rose-400 bg-rose-950/20 p-3 rounded-xl border border-rose-900/40 w-fit">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>AI กำลังค้นหาข้อมูลจาก Knowledge Base...</span>
+          <div className="flex items-center gap-2.5 text-xs font-mono text-rose-300 bg-rose-950/25 p-3 rounded-xl w-fit">
+            <Loader2 className="w-4 h-4 animate-spin text-rose-400" />
+            <span>กำลังสแกนฐานข้อมูลวิศวกรรมยานยนต์...</span>
           </div>
         )}
       </div>
 
       {/* Quick Question Chips */}
-      <div className="px-3 py-2 bg-slate-900/90 border-t border-brand-border/60 overflow-x-auto whitespace-nowrap flex gap-1.5">
+      <div className="px-3 py-2.5 bg-black/40 overflow-x-auto whitespace-nowrap flex gap-1.5">
         {quickQuestions.map((q, idx) => (
           <button
             key={idx}
             onClick={() => handleSendMessage(q)}
             disabled={isLoading}
-            className="inline-block px-2.5 py-1 rounded-full text-[11px] bg-slate-800 hover:bg-rose-900/40 text-slate-300 hover:text-white border border-slate-700/60 transition-colors shrink-0"
+            className="inline-block px-3 py-1.5 rounded-lg text-[11px] font-mono bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors shrink-0"
           >
             {q}
           </button>
@@ -181,7 +186,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
       </div>
 
       {/* Input Area */}
-      <div className="p-3 bg-brand-card border-t border-brand-border">
+      <div className="p-3 bg-black/30">
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
       </div>
 

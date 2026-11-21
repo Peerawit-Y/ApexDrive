@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../types/product';
-import { Zap, Timer, Disc, ShoppingBag, Scale, Check } from 'lucide-react';
+import { ShoppingBag, Scale, Check, ArrowRight } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -19,120 +19,106 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
 }) => {
   return (
-    <div className="group bg-brand-card rounded-2xl border border-brand-border overflow-hidden flex flex-col hover:border-rose-500/50 hover:shadow-2xl hover:shadow-rose-950/20 transition-all duration-300">
+    <div className="group relative rounded-3xl bg-[#0B0D13] hover:bg-[#10131B] transition-all duration-500 overflow-hidden flex flex-col shadow-xl hover:shadow-2xl hover:shadow-black/90 hover:-translate-y-1.5 w-full">
       
-      {/* Image Container with Badges */}
-      <div className="relative h-52 w-full overflow-hidden bg-slate-900">
+      {/* Clickable Card Overlay */}
+      <Link
+        to={`/products/${product.id}`}
+        className="absolute inset-0 z-0"
+        aria-label={`ดูรายละเอียด ${product.brand} ${product.model}`}
+      />
+
+      {/* 1. Cinematic Car Image (Minimal, Uncluttered) */}
+      <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-[#07090E]">
         <img
           src={product.image}
           alt={`${product.brand} ${product.model}`}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-106"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-card via-transparent to-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D13] via-transparent to-black/30 pointer-events-none" />
 
-        {/* Top Badges */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5">
-          <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/70 backdrop-blur-md text-white border border-white/10 uppercase tracking-wider">
-            {product.brand}
-          </span>
-          <span className="px-2 py-1 rounded-md text-[11px] font-semibold bg-rose-600/90 text-white backdrop-blur-md">
-            {product.year}
-          </span>
-        </div>
+        {/* Top-Right: Discreet Luxury Quick Actions (Z-Index above link) */}
+        <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+          
+          {/* Compare Toggle */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleCompare(product);
+            }}
+            title={isCompared ? 'นำออกจากการเปรียบเทียบ' : 'เลือกเพื่อเปรียบเทียบสเปก'}
+            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all backdrop-blur-md ${
+              isCompared
+                ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/40 scale-105'
+                : 'bg-black/50 text-slate-300 hover:text-white hover:bg-white/20'
+            }`}
+            aria-label="Toggle comparison"
+          >
+            {isCompared ? <Check className="w-4 h-4 stroke-[2.5]" /> : <Scale className="w-4 h-4" />}
+          </button>
 
-        {/* Drivetrain Badge */}
-        <div className="absolute top-3 right-3">
-          <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-slate-900/90 text-amber-300 border border-amber-500/30 backdrop-blur-md">
-            {product.drivetrain}
-          </span>
-        </div>
+          {/* Cart / Bookmark Toggle */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onAddToCart(product);
+            }}
+            title={isInCart ? 'อยู่ในรายการที่เลือกแล้ว' : 'เพิ่มในรายการจองจำลอง'}
+            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all backdrop-blur-md ${
+              isInCart
+                ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/40 scale-105'
+                : 'bg-black/50 text-slate-300 hover:text-white hover:bg-white/20'
+            }`}
+            aria-label="Add to simulated cart"
+          >
+            {isInCart ? <Check className="w-4 h-4 text-white stroke-[2.5]" /> : <ShoppingBag className="w-4 h-4" />}
+          </button>
 
-        {/* Quick Specs Overlay */}
-        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-slate-200">
-          <div className="flex items-center gap-1 font-semibold bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md border border-white/5">
-            <Zap className="w-3.5 h-3.5 text-amber-400" />
-            <span>{product.horsepower} HP</span>
-          </div>
-          <div className="flex items-center gap-1 font-semibold bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md border border-white/5">
-            <Timer className="w-3.5 h-3.5 text-rose-400" />
-            <span>0-100: {product.acceleration_0_100_sec}s</span>
-          </div>
-          <div className="flex items-center gap-1 font-semibold bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md border border-white/5">
-            <Disc className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{product.top_speed_kmh} km/h</span>
-          </div>
         </div>
       </div>
 
-      {/* Body Info */}
-      <div className="p-5 flex-1 flex flex-col justify-between">
-        <div>
-          <div className="text-xs text-rose-400 font-medium tracking-wide uppercase mb-1">
-            {product.category}
+      {/* 2. Car Information Body (Minimalist Luxury Typography) */}
+      <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-5 relative pointer-events-none">
+        
+        {/* Brand & Model Headline */}
+        <div className="space-y-1.5">
+          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-slate-400">
+            {product.brand} · {product.drivetrain}
           </div>
-          <Link to={`/products/${product.id}`} className="block">
-            <h3 className="text-lg font-bold text-white group-hover:text-rose-400 transition-colors line-clamp-1">
-              {product.brand} {product.model}
-            </h3>
-          </Link>
-          <p className="text-xs text-slate-400 mt-1 line-clamp-1">
-            {product.engine}
+
+          <h3 className="text-2xl sm:text-3xl font-light tracking-tight text-white group-hover:text-rose-400 transition-colors line-clamp-1">
+            {product.model}
+          </h3>
+
+          {/* Minimalist 1-Line Key Spec */}
+          <p className="text-xs sm:text-sm text-slate-400 font-light pt-1">
+            {product.horsepower} แรงม้า · 0-100 กม./ชม. ใน {product.acceleration_0_100_sec} วินาที
           </p>
         </div>
 
-        {/* Pricing & Actions */}
-        <div className="mt-5 pt-4 border-t border-brand-border/60">
-          <div className="flex items-baseline justify-between mb-4">
-            <span className="text-[11px] text-slate-400 uppercase tracking-wider">ราคาจำลอง</span>
-            <div className="text-right">
-              <span className="text-base font-extrabold text-white">
-                ฿{product.price.toLocaleString()}
-              </span>
-              <span className="text-[10px] text-slate-400 ml-1 font-medium">{product.currency}</span>
-            </div>
+        {/* 3. Understated Price & Clean Discover Link */}
+        <div className="pt-2 flex items-end justify-between border-t border-white/[0.06]">
+          <div>
+            <span className="text-[11px] text-slate-400 font-light block">
+              เริ่มต้น
+            </span>
+            <span className="text-xl sm:text-2xl font-light tracking-tight text-white">
+              ฿{product.price.toLocaleString()}
+            </span>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
-            
-            {/* Compare Toggle */}
-            <button
-              onClick={() => onToggleCompare(product)}
-              title={isCompared ? 'นำออกจากการเปรียบเทียบ' : 'เพิ่มเพื่อเปรียบเทียบสเปก'}
-              className={`flex items-center justify-center gap-1 py-2 px-2 rounded-xl text-xs font-semibold border transition-all ${
-                isCompared
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
-                  : 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 border-slate-700/60'
-              }`}
-            >
-              <Scale className="w-3.5 h-3.5" />
-              <span className="text-[11px]">{isCompared ? 'เทียบแล้ว' : 'เทียบ'}</span>
-            </button>
-
-            {/* Simulation Cart Add */}
-            <button
-              onClick={() => onAddToCart(product)}
-              title="เพิ่มใส่ตะกร้าจำลอง"
-              className={`flex items-center justify-center gap-1 py-2 px-2 rounded-xl text-xs font-semibold border transition-all ${
-                isInCart
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
-                  : 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 border-slate-700/60'
-              }`}
-            >
-              {isInCart ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <ShoppingBag className="w-3.5 h-3.5" />}
-              <span className="text-[11px]">{isInCart ? 'ในตะกร้า' : 'ใส่ตะกร้า'}</span>
-            </button>
-
-            {/* View Detail Link */}
-            <Link
-              to={`/products/${product.id}`}
-              className="flex items-center justify-center py-2 px-2 rounded-xl text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-950/40 transition-colors text-center"
-            >
-              ดูรายละเอียด
-            </Link>
+          {/* Sleek Minimalist CTA */}
+          <div className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 group-hover:text-white transition-colors">
+            <span>สำรวจรุ่นนี้</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
+
       </div>
+
     </div>
   );
 };

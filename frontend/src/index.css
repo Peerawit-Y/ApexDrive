@@ -5,25 +5,42 @@
 @layer base {
   body {
     @apply bg-brand-dark text-slate-100;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(225, 29, 72, 0.08), transparent),
+      radial-gradient(circle at 100% 100%, rgba(229, 169, 60, 0.03), transparent 40%);
+    background-attachment: fixed;
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: #08090C;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f293d;
-  border-radius: 4px;
+  background: #1e2330;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #e11d48;
+}
+
+/* Seamless Luxury Glass Surface without harsh border lines */
+.glass-panel {
+  background: rgba(18, 21, 30, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.glass-panel-hover:hover {
+  background: rgba(24, 28, 40, 0.75);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
 }

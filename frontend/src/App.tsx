@@ -5,7 +5,6 @@ import { getFeaturedProducts, products } from './services/productService';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CartModal } from './components/CartModal';
-import { ChatWindow } from './components/Chatbot/ChatWindow';
 
 // Pages
 import { Home } from './pages/Home';
@@ -20,7 +19,6 @@ export const App: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Cart Handlers
   const handleAddToCart = (product: Product) => {
@@ -68,28 +66,22 @@ export const App: React.FC = () => {
     setCompareIds([]);
   };
 
-  // AI Chat handler
-  const handleAskCarAI = (_carName: string) => {
-    setIsChatOpen(true);
-  };
-
   const comparedProducts = products.filter(p => compareIds.includes(p.id));
   const featured = getFeaturedProducts();
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-[#0B0F19] text-slate-100">
+      <div className="min-h-screen flex flex-col bg-brand-dark text-slate-100 relative overflow-x-hidden">
         
         {/* Navigation Bar */}
         <Navbar
           cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
           compareCount={compareIds.length}
           onOpenCart={() => setIsCartOpen(true)}
-          onOpenChat={() => setIsChatOpen(true)}
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <main className="flex-1 w-full">
           <Routes>
             <Route
               path="/"
@@ -100,65 +92,84 @@ export const App: React.FC = () => {
                   cartIds={cartItems.map(i => i.product.id)}
                   onToggleCompare={handleToggleCompare}
                   onAddToCart={handleAddToCart}
-                  onOpenChat={() => setIsChatOpen(true)}
                 />
               }
             />
             <Route
               path="/products"
               element={
-                <Products
-                  compareIds={compareIds}
-                  cartIds={cartItems.map(i => i.product.id)}
-                  onToggleCompare={handleToggleCompare}
-                  onAddToCart={handleAddToCart}
-                />
+                <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 py-8 sm:py-12">
+                  <Products
+                    compareIds={compareIds}
+                    cartIds={cartItems.map(i => i.product.id)}
+                    onToggleCompare={handleToggleCompare}
+                    onAddToCart={handleAddToCart}
+                  />
+                </div>
               }
             />
             <Route
               path="/products/:id"
               element={
-                <ProductDetail
-                  compareIds={compareIds}
-                  cartIds={cartItems.map(i => i.product.id)}
-                  onToggleCompare={handleToggleCompare}
-                  onAddToCart={handleAddToCart}
-                  onAskCarAI={handleAskCarAI}
-                />
+                <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 py-8 sm:py-12">
+                  <ProductDetail
+                    compareIds={compareIds}
+                    cartIds={cartItems.map(i => i.product.id)}
+                    onToggleCompare={handleToggleCompare}
+                    onAddToCart={handleAddToCart}
+                  />
+                </div>
               }
             />
-            <Route path="/categories" element={<Categories />} />
+            <Route
+              path="/categories"
+              element={
+                <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 py-8 sm:py-12">
+                  <Categories />
+                </div>
+              }
+            />
             <Route
               path="/compare"
               element={
-                <Compare
-                  compareProducts={comparedProducts}
-                  onRemove={handleRemoveFromCompare}
-                  onClear={handleClearCompare}
-                />
+                <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 py-8 sm:py-12">
+                  <Compare
+                    compareProducts={comparedProducts}
+                    onRemove={handleRemoveFromCompare}
+                    onClear={handleClearCompare}
+                  />
+                </div>
               }
             />
-            <Route path="/about" element={<About />} />
-            <Route path="/faq" element={<FAQ onOpenChat={() => setIsChatOpen(true)} />} />
+            <Route
+              path="/about"
+              element={
+                <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 py-8 sm:py-12">
+                  <About />
+                </div>
+              }
+            />
+            <Route
+              path="/faq"
+              element={
+                <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 py-8 sm:py-12">
+                  <FAQ />
+                </div>
+              }
+            />
           </Routes>
         </main>
 
         {/* Global Footer */}
         <Footer />
 
-        {/* Cart Simulation Modal */}
+        {/* Cart Modal */}
         <CartModal
           isOpen={isCartOpen}
           items={cartItems}
           onClose={() => setIsCartOpen(false)}
           onRemoveItem={handleRemoveFromCart}
           onClearCart={handleClearCart}
-        />
-
-        {/* AI Chatbot Floating Window */}
-        <ChatWindow
-          isOpen={isChatOpen}
-          onClose={() => setIsChatOpen(false)}
         />
 
       </div>

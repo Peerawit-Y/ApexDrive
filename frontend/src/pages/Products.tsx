@@ -4,7 +4,7 @@ import { ProductCard } from '../components/ProductCard';
 import { SearchBar } from '../components/SearchBar';
 import { FilterPanel } from '../components/FilterPanel';
 import { filterAndSortProducts, getBrands, getCategories } from '../services/productService';
-import { SlidersHorizontal, Car } from 'lucide-react';
+import { SlidersHorizontal, Car, Gauge } from 'lucide-react';
 
 interface ProductsProps {
   compareIds: string[];
@@ -45,16 +45,19 @@ export const Products: React.FC<ProductsProps> = ({
     <div className="space-y-8">
       
       {/* Page Title & Search Header */}
-      <div className="space-y-4">
+      <div className="space-y-4 pb-2">
         <div>
-          <span className="text-xs font-bold text-rose-500 uppercase tracking-widest">Inventory & Catalog</span>
-          <h1 className="text-3xl font-extrabold text-white mt-1">รายการรถยนต์ทั้งหมด</h1>
-          <p className="text-xs text-slate-400 mt-1">
-            ค้นหา กรองตามพละกำลัง ระบบขับเคลื่อน และเปรียบเทียบสเปกได้ในที่เดียว
+          <div className="flex items-center gap-2 text-rose-500 font-mono text-xs font-bold uppercase tracking-widest">
+            <Gauge className="w-4 h-4" />
+            <span>APEX SHOWROOM & TELEMETRY ARCHIVE</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-black text-white mt-1">คลังรถยนต์และข้อมูลจำเพาะ</h1>
+          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl font-normal">
+            ค้นหาและคัดกรองตามพละกำลัง ระบบขับเคลื่อน (RWD / AWD) หรือสถาปัตยกรรมเครื่องยนต์ เพื่อการเปรียบเทียบสเปกอย่างแม่นยำ
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
           <div className="flex-1 w-full">
             <SearchBar
               value={filters.searchQuery}
@@ -63,7 +66,7 @@ export const Products: React.FC<ProductsProps> = ({
           </div>
           <button
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-            className="lg:hidden w-full sm:w-auto px-4 py-3 bg-brand-card border border-brand-border rounded-xl text-xs font-semibold text-slate-200 flex items-center justify-center gap-2"
+            className="lg:hidden w-full sm:w-auto px-5 py-3.5 bg-white/[0.06] rounded-xl text-xs font-mono font-semibold text-slate-200 flex items-center justify-center gap-2"
           >
             <SlidersHorizontal className="w-4 h-4 text-rose-500" />
             <span>กรองข้อมูล ({filteredProducts.length})</span>
@@ -87,14 +90,14 @@ export const Products: React.FC<ProductsProps> = ({
 
         {/* Product Cards Grid */}
         <div className="lg:col-span-3 space-y-6">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center justify-between text-xs font-mono text-slate-400">
             <span>
-              พบทั้งหมด <strong className="text-white font-bold">{filteredProducts.length}</strong> รุ่น
+              SHOWING <strong className="text-white font-bold">{filteredProducts.length}</strong> / 8 CHASSIS
             </span>
             {(filters.brand || filters.category || filters.drivetrain || filters.minHorsepower > 0 || filters.searchQuery) && (
               <button
                 onClick={handleReset}
-                className="text-rose-400 hover:text-rose-300 font-medium underline"
+                className="text-rose-400 hover:text-rose-300 font-medium underline underline-offset-4"
               >
                 ล้างการค้นหาทั้งหมด
               </button>
@@ -102,21 +105,21 @@ export const Products: React.FC<ProductsProps> = ({
           </div>
 
           {filteredProducts.length === 0 ? (
-            <div className="bg-brand-card p-12 rounded-2xl border border-brand-border text-center space-y-4">
+            <div className="glass-panel p-12 rounded-2xl text-center space-y-4">
               <Car className="w-12 h-12 text-slate-600 mx-auto" />
               <h3 className="text-base font-bold text-white">ไม่พบรถยนต์ที่ตรงตามเงื่อนไข</h3>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                ลองปรับเปลี่ยนคำค้นหา หรือกดปุ่ม "ล้างค่า" ในแถบกรองข้อมูลเพื่อดูรายการทั้งหมด
+              <p className="text-xs text-slate-400 max-w-sm mx-auto font-mono">
+                ลองปรับลดเงื่อนไขแรงม้าขั้นต่ำ หรือกดปุ่ม "RESET" ในแถบกรองข้อมูล
               </p>
               <button
                 onClick={handleReset}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold"
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-mono font-semibold shadow-lg shadow-rose-950/40"
               >
-                ล้างตัวกรอง
+                ล้างตัวกรองทั้งหมด
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
               {filteredProducts.map(car => (
                 <ProductCard
                   key={car.id}
