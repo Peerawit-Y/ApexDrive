@@ -1,0 +1,5 @@
+{
+  "name": "apexdrive-chatbot",
+  "compatibility_date": "2026-11-19",
+  "main": "worker.js"
+}

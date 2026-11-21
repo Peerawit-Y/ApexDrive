@@ -36,7 +36,7 @@ export const Home: React.FC<HomeProps> = ({
       id: 'apex-x-hyper',
       title: 'APEX X Hyper.',
       subtitle: 'The 980 HP Hand-Built Twin-Turbo V12 Flagship',
-      image: './Photo/apex-x-hyper.jpg',
+      image: './Photo/apex-x-hyper.png',
       targetUrl: '/products/apex-x-hyper',
       specs: { hp: '980 HP', acc: '0-100: 2.5s', type: 'Twin-Turbo V12 AWD' }
     },

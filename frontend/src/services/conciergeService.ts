@@ -1,6 +1,7 @@
 import { products } from './productService';
 import { getLocalizedProduct } from '../data/productsEn';
 import { Language } from '../context/LanguageContext';
+import { askRag } from './ragService';
 
 export interface ChatResponse {
   text: string;
@@ -9,32 +10,10 @@ export interface ChatResponse {
 }
 
 /**
- * Queries the configured backend RAG endpoint (VITE_CHAT_API_URL) if available;
- * otherwise answers directly from the verified ApexDrive catalog so the UI works immediately.
+ * Queries the RAG pipeline (Cloudflare Worker + APEXSports docs, configured via VITE_WORKER_URL)
+ * if available; otherwise answers directly from the verified ApexDrive catalog so the UI works immediately.
  */
 export async function askConcierge(query: string, lang: Language): Promise<ChatResponse> {
-  const apiUrl = (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_CHAT_API_URL;
-
-  if (apiUrl) {
-    try {
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, language: lang })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        return {
-          text: data.text || data.answer || '',
-          citations: Array.isArray(data.citations) ? data.citations : [],
-          recommendedIds: Array.isArray(data.recommendedIds) ? data.recommendedIds : []
-        };
-      }
-    } catch {
-      // Fallback to local verified catalog engine below
-    }
-  }
-
   // Slight natural delay for luxury conversational cadence
   await new Promise(resolve => setTimeout(resolve, 480));
 
@@ -84,26 +63,61 @@ export async function askConcierge(query: string, lang: Language): Promise<ChatR
     };
   }
 
-  // 3. Daily driving / budget / under 3M / beginner
-  if (q.includes('ทุกวัน') || q.includes('งบ') || q.includes('ถูก') || q.includes('3 ล้าน') || q.includes('daily') || q.includes('budget') || q.includes('3m') || q.includes('beginner')) {
-    const accessible = [...localized].sort((a, b) => a.price - b.price).slice(0, 3);
+  // 3. Daily driving / budget / beginner
+  const budgetMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:ล้าน|m\b)/i);
+  if (q.includes('ทุกวัน') || q.includes('งบ') || q.includes('ถูก') || q.includes('daily') || q.includes('budget') || q.includes('beginner') || budgetMatch) {
+    const budgetBaht = budgetMatch ? parseFloat(budgetMatch[1]) * 1_000_000 : null;
+    const sorted = [...localized].sort((a, b) => a.price - b.price);
+    const withinBudget = budgetBaht ? sorted.filter(p => p.price <= budgetBaht) : sorted;
+
+    if (budgetBaht && withinBudget.length === 0) {
+      const cheapest = sorted[0];
+      return {
+        text: isEn
+          ? `No model is currently available under ฿${(budgetBaht / 1_000_000).toLocaleString()}M THB. Our most accessible model is the ${cheapest.brand} ${cheapest.model} at ฿${cheapest.price.toLocaleString()} THB.`
+          : `ยังไม่มีรุ่นที่ราคาไม่เกิน ${(budgetBaht / 1_000_000).toLocaleString()} ล้านบาทครับ รุ่นที่เข้าถึงง่ายที่สุดตอนนี้คือ ${cheapest.brand} ${cheapest.model} ราคา ฿${cheapest.price.toLocaleString()} THB`,
+        citations: ['ApexDrive Showroom Pricing Guide (Thailand Official)'],
+        recommendedIds: [cheapest.id]
+      };
+    }
+
+    const accessible = withinBudget.slice(0, 3);
+    const lines = accessible.map(c =>
+      isEn
+        ? `• ${c.model} — ฿${c.price.toLocaleString()} THB (${c.horsepower} HP · ${c.fuel_type})`
+        : `• ${c.model} — ฿${c.price.toLocaleString()} THB (${c.horsepower} แรงม้า · ${c.fuel_type})`
+    ).join('\n');
+    const heading = budgetBaht
+      ? (isEn
+          ? `Models under ฿${(budgetBaht / 1_000_000).toLocaleString()}M THB:`
+          : `รุ่นที่ราคาไม่เกิน ${(budgetBaht / 1_000_000).toLocaleString()} ล้านบาท ได้แก่:`)
+      : (isEn
+          ? 'For daily usability or an accessible entry into performance driving:'
+          : 'รุ่นที่เหมาะสำหรับการขับใช้งานทุกวันและเข้าถึงง่าย ได้แก่:');
+
     return {
-      text: isEn
-        ? `For daily usability or an accessible entry into performance driving (under ฿3M THB):\n\n• ${accessible[0].model} — ฿${accessible[0].price.toLocaleString()} THB (${accessible[0].horsepower} HP · ${accessible[0].fuel_type})\n• ${accessible[1].model} — ฿${accessible[1].price.toLocaleString()} THB (${accessible[1].horsepower} HP · ${accessible[1].fuel_type})\n• ${accessible[2].model} — ฿${accessible[2].price.toLocaleString()} THB (${accessible[2].horsepower} HP · ${accessible[2].drivetrain})`
-        : `รุ่นที่เหมาะสำหรับการขับใช้งานทุกวันและอยู่ในงบไม่เกิน 3 ล้านบาท ได้แก่:\n\n• ${accessible[0].model} — ฿${accessible[0].price.toLocaleString()} THB (${accessible[0].horsepower} แรงม้า · ${accessible[0].fuel_type})\n• ${accessible[1].model} — ฿${accessible[1].price.toLocaleString()} THB (${accessible[1].horsepower} แรงม้า · ${accessible[1].fuel_type})\n• ${accessible[2].model} — ฿${accessible[2].price.toLocaleString()} THB (${accessible[2].horsepower} แรงม้า · ${accessible[2].drivetrain})`,
+      text: `${heading}\n\n${lines}`,
       citations: ['ApexDrive Showroom Pricing Guide (Thailand Official)'],
       recommendedIds: accessible.map(c => c.id)
     };
   }
 
   // 4. Electric / Hybrid
-  if (q.includes('ไฟฟ้า') || q.includes('ev') || q.includes('electric') || q.includes('hybrid') || q.includes('ไฮบริด')) {
+  if (q.includes('ไฟฟ้า') || /\bev\b/.test(q) || q.includes('electric') || q.includes('hybrid') || q.includes('ไฮบริด')) {
     const electrified = localized.filter(p => p.fuel_type.includes('Electric') || p.fuel_type.includes('Hybrid'));
+    if (electrified.length === 0) {
+      return {
+        text: isEn
+          ? `All ${products.length} vehicles in our current showroom are petrol-powered — we do not have electric or hybrid models at this time.`
+          : `รถทั้ง ${products.length} รุ่นในโชว์รูมตอนนี้เป็นเครื่องยนต์สันดาปทั้งหมด ยังไม่มีรุ่นพลังงานไฟฟ้าหรือไฮบริดครับ`,
+        citations: ['ApexDrive Electrified Powertrain Archive']
+      };
+    }
     return {
       text: isEn
         ? `We currently offer ${electrified.length} electrified performance models spanning Plug-in Hybrids (PHEV) and Pure Electric (BEV), led by the ${electrified[0].brand} ${electrified[0].model} (${electrified[0].horsepower.toLocaleString()} HP).`
         : `ในโชว์รูมมีรถพลังงานไฟฟ้าและปลั๊กอินไฮบริดทั้งหมด ${electrified.length} รุ่น นำโดย ${electrified[0].brand} ${electrified[0].model} (${electrified[0].horsepower.toLocaleString()} แรงม้า) ครับ`,
-      citations: ['ApexDrive Electrified Powertrain Archive'],
+        citations: ['ApexDrive Electrified Powertrain Archive'],
       recommendedIds: electrified.slice(0, 3).map(c => c.id)
     };
   }
@@ -121,11 +135,20 @@ export async function askConcierge(query: string, lang: Language): Promise<ChatR
     };
   }
 
+  // None of the known patterns matched — try RAG for open-ended questions
+  // (e.g. financing, contact info, warranty) that the docs cover but the rules above don't
+  try {
+    const rag = await askRag(query, lang);
+    if (rag) return rag;
+  } catch {
+    // Fall through to the default response below
+  }
+
   // Default helpful concierge response
   return {
     text: isEn
-      ? `I am your ApexDrive Private Concierge. I can assist you with technical specifications, horsepower & acceleration rankings, head-to-head model comparisons, or tailored recommendations across all ${products.length} vehicles in our showroom.\n\nTry asking about a specific model (e.g. "Bugatti Chiron" or "APEX 35 GT") or your driving preference.`
-      : `ยินดีต้อนรับสู่ ApexDrive Private Concierge ครับ ผมสามารถช่วยค้นหาข้อมูลสเปกรถยนต์ เปรียบเทียบสมรรถนะระหว่างรุ่น หรือแนะนำรถตามงบประมาณและสไตล์การขับขี่จากคลังทั้ง ${products.length} รุ่นของเราได้ครับ\n\nลองพิมพ์ชื่อรุ่นที่สนใจ (เช่น "Bugatti Chiron", "APEX 35 GT") หรือเลือกคำถามแนะนำด้านล่างได้เลยครับ`,
+      ? `I am your ApexDrive Private Concierge. I can assist you with technical specifications, horsepower & acceleration rankings, head-to-head model comparisons, or tailored recommendations across all ${products.length} vehicles in our showroom.\n\nTry asking about a specific model (e.g. "APEX X Hyper" or "APEX 35 GT") or your driving preference.`
+      : `ยินดีต้อนรับสู่ ApexDrive Private Concierge ครับ ผมสามารถช่วยค้นหาข้อมูลสเปกรถยนต์ เปรียบเทียบสมรรถนะระหว่างรุ่น หรือแนะนำรถตามงบประมาณและสไตล์การขับขี่จากคลังทั้ง ${products.length} รุ่นของเราได้ครับ\n\nลองพิมพ์ชื่อรุ่นที่สนใจ (เช่น "APEX X Hyper", "APEX 35 GT") หรือเลือกคำถามแนะนำด้านล่างได้เลยครับ`,
     citations: ['ApexDrive Concierge Knowledge Base']
   };
 }

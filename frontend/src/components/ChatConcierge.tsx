@@ -25,9 +25,9 @@ export const ChatConcierge: React.FC = () => {
 
   const quickPrompts = [
     t('รุ่นไหนแรงม้ามากที่สุด?', 'Which model has the most HP?'),
-    t('เทียบ Bugatti Chiron กับ Lamborghini Revuelto', 'Compare Chiron vs Revuelto'),
+    t('เทียบ APEX X Hyper กับ APEX 10 Evo', 'Compare APEX X Hyper vs APEX 10 Evo'),
     t('แนะนำรถขับใช้งานทุกวัน งบไม่เกิน 3 ล้าน', 'Best daily car under ฿3M?'),
-    t('มีรถพลังงานไฟฟ้าและไฮบริดรุ่นไหนบ้าง?', 'Show electric & hybrid models')
+    t('มีรุ่นขับเคลื่อน 4 ล้อ (AWD) รุ่นไหนบ้าง?', 'Which models are AWD?')
   ];
 
   // Show subtle luxury greeting tooltip shortly after load
@@ -73,6 +73,16 @@ export const ChatConcierge: React.FC = () => {
         recommendedIds: response.recommendedIds
       };
       setMessages(prev => [...prev, aiMsg]);
+    } catch {
+      const errMsg: Message = {
+        id: `a-${Date.now()}`,
+        role: 'assistant',
+        text: t(
+          'ขออภัยครับ เกิดข้อผิดพลาดขณะประมวลผล กรุณาลองใหม่อีกครั้ง',
+          'Sorry, something went wrong processing that. Please try again.'
+        )
+      };
+      setMessages(prev => [...prev, errMsg]);
     } finally {
       setIsTyping(false);
     }
