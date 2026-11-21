@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Menu, X, ChevronRight } from 'lucide-react';
+import { ShoppingBag, Menu, X, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface NavbarProps {
   cartCount: number;
@@ -15,14 +16,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const { lang, setLang, t } = useLanguage();
 
   const navLinks = [
-    { name: 'หน้าแรก', path: '/' },
-    { name: 'รายการรถยนต์ทั้งหมด', path: '/products' },
-    { name: 'หมวดหมู่ & ส่งกำลัง', path: '/categories' },
-    { name: 'เปรียบเทียบสเปก', path: '/compare' },
-    { name: 'เกี่ยวกับเรา', path: '/about' },
-    { name: 'คำถามที่พบบ่อย (FAQ)', path: '/faq' },
+    { name: t('หน้าแรก', 'Home'), subtitle: 'SHOWROOM', path: '/' },
+    { name: t('คอลเลกชันยนตรกรรม', 'Models & Collection'), subtitle: 'MODELS', path: '/products' },
+    { name: t('หมวดหมู่และระบบขับเคลื่อน', 'Categories & Drivetrain'), subtitle: 'DRIVETRAIN', path: '/categories' },
+    { name: t('เปรียบเทียบสเปก', 'Compare Specifications'), subtitle: 'COMPARE', path: '/compare' },
+    { name: t('เกี่ยวกับเรา', 'About ApexDrive'), subtitle: 'ABOUT', path: '/about' },
+    { name: t('คำถามที่พบบ่อย', 'Frequently Asked Questions'), subtitle: 'FAQ', path: '/faq' },
   ];
 
   const isActive = (path: string) => {
@@ -32,50 +34,75 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-black/40 transition-all">
-        <div className="w-full px-4 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
+      <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-black/50 border-b border-white/[0.06] transition-all">
+        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 h-20 flex items-center justify-between">
           
-          {/* Left: Porsche Style "≡ Menu" Toggle */}
+          {/* Left: Porsche-Inspired Minimal "≡ Menu" */}
           <div className="flex items-center">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex items-center gap-2.5 text-xs font-mono font-bold tracking-widest text-white hover:text-rose-400 uppercase py-2 px-3 rounded-lg hover:bg-white/[0.08] transition-all"
+              className="flex items-center gap-3 text-xs tracking-[0.22em] text-neutral-200 hover:text-white uppercase py-2 px-2 -ml-2 transition-colors"
               aria-label="Toggle Menu"
             >
-              <Menu className="w-4 h-4 text-white" />
-              <span>MENU</span>
+              <Menu className="w-4 h-4 stroke-[1.5]" />
+              <span className="font-light">{t('เมนู', 'Menu')}</span>
             </button>
           </div>
 
-          {/* Center: Iconic Wide Brand Wordmark (Porsche Aesthetic) */}
+          {/* Center: Iconic Wide-Tracked Monochrome Wordmark */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center group">
-            <span className="text-lg sm:text-2xl font-black font-mono tracking-[0.35em] uppercase text-white group-hover:text-rose-400 transition-colors">
-              APEX<span className="text-rose-500">DRIVE</span>
+            <span className="text-base sm:text-xl font-light tracking-[0.42em] uppercase text-white group-hover:opacity-80 transition-opacity">
+              APEXDRIVE
             </span>
           </Link>
 
-          {/* Right: Flag, Telemetry, Cart, Co-Pilot */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Right: Interactive TH / EN Switcher & Reservation Bag */}
+          <div className="flex items-center gap-3 sm:gap-4">
             
-            {/* Thailand Flag Icon (Matches Porsche TH Screenshot) */}
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] text-xs font-mono text-slate-300" title="Thailand Official Market">
-              <span className="text-base leading-none">🇹🇭</span>
-              <span className="text-[11px] font-bold text-slate-300">TH</span>
+            {/* Luxury TH / EN Language Toggle */}
+            <div
+              className="inline-flex items-center p-0.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-[10px] tracking-[0.18em] uppercase"
+              role="group"
+              aria-label="Language switcher"
+            >
+              <button
+                type="button"
+                onClick={() => setLang('th')}
+                className={`px-2.5 py-1 rounded-full transition-all ${
+                  lang === 'th'
+                    ? 'bg-white text-black font-medium'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                TH
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang('en')}
+                className={`px-2.5 py-1 rounded-full transition-all ${
+                  lang === 'en'
+                    ? 'bg-white text-black font-medium'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                EN
+              </button>
             </div>
 
-            {/* Cart Button */}
+            {/* Minimal Cart Button */}
             <button
               onClick={onOpenCart}
-              title="ตะกร้ารถยนต์"
-              className={`relative px-3 py-2 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 transition-all ${
+              title={t('รายการจองรถยนต์', 'Vehicle Reservation')}
+              className={`relative px-3.5 py-2 rounded-full text-xs flex items-center gap-2 transition-all border ${
                 cartCount > 0
-                  ? 'bg-rose-500/20 text-rose-300'
-                  : 'bg-white/[0.06] text-slate-300 hover:text-white hover:bg-white/[0.1]'
+                  ? 'bg-white text-black border-white font-medium'
+                  : 'bg-transparent text-neutral-300 border-white/15 hover:border-white/40 hover:text-white'
               }`}
+              aria-label="Open vehicle reservation"
             >
-              <ShoppingBag className="w-4 h-4 text-slate-400" />
+              <ShoppingBag className="w-3.5 h-3.5 stroke-[1.75]" />
               {cartCount > 0 && (
-                <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-rose-600 text-white">
+                <span className="text-[11px] leading-none">
                   {cartCount}
                 </span>
               )}
@@ -85,64 +112,100 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </header>
 
-      {/* Slide-out Menu Overlay (Porsche Style Drawer) */}
+      {/* Slide-out Luxury Menu Drawer */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 flex">
           {/* Backdrop */}
           <div
             onClick={() => setMenuOpen(false)}
-            className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
           />
 
           {/* Drawer Panel */}
-          <div className="relative w-full max-w-md bg-[#0D1017] h-full p-8 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-300 z-10 shadow-2xl">
+          <div className="relative w-full max-w-md bg-[#08090C] border-r border-white/[0.08] h-full p-8 sm:p-10 flex flex-col justify-between overflow-y-auto z-10">
             <div>
-              <div className="flex items-center justify-between pb-6">
-                <span className="text-lg font-black font-mono tracking-[0.3em] uppercase text-white">
-                  APEX<span className="text-rose-500">DRIVE</span>
+              <div className="flex items-center justify-between pb-8 border-b border-white/[0.08]">
+                <span className="text-sm font-light tracking-[0.4em] uppercase text-white">
+                  APEXDRIVE
                 </span>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+                  className="w-9 h-9 rounded-full border border-white/[0.12] text-neutral-400 hover:text-white hover:border-white/40 flex items-center justify-center transition-colors"
+                  aria-label="Close menu"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 stroke-[1.5]" />
                 </button>
               </div>
 
-              <nav className="mt-8 space-y-2">
-                <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-slate-500 px-3 mb-2">
-                  EXPLORE ARCHIVE
-                </div>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setMenuOpen(false)}
-                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-mono tracking-wider transition-all ${
-                      isActive(link.path)
-                        ? 'text-white bg-rose-600/25 text-rose-300 font-bold'
-                        : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
-                    }`}
-                  >
-                    <span>{link.name}</span>
-                    <div className="flex items-center gap-2">
-                      {link.path === '/compare' && compareCount > 0 && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500 text-black">
-                          {compareCount}
+              <nav className="mt-8 divide-y divide-white/[0.06]">
+                {navLinks.map((link) => {
+                  const active = isActive(link.path);
+                  return (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={() => setMenuOpen(false)}
+                      className="py-5 flex items-center justify-between group transition-colors"
+                    >
+                      <div className="space-y-0.5">
+                        <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-600 block">
+                          {link.subtitle}
                         </span>
-                      )}
-                      <ChevronRight className="w-4 h-4 text-slate-500" />
-                    </div>
-                  </Link>
-                ))}
+                        <span
+                          className={`text-lg font-light tracking-tight transition-colors ${
+                            active
+                              ? 'text-white'
+                              : 'text-neutral-400 group-hover:text-white'
+                          }`}
+                        >
+                          {link.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {link.path === '/compare' && compareCount > 0 && (
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-white text-black">
+                            {compareCount}
+                          </span>
+                        )}
+                        <ArrowRight
+                          className={`w-4 h-4 transition-all ${
+                            active
+                              ? 'text-white translate-x-0.5'
+                              : 'text-neutral-600 group-hover:text-white group-hover:translate-x-1'
+                          }`}
+                        />
+                      </div>
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
 
-            {/* Bottom Drawer Footer */}
-            <div className="pt-8 space-y-4 font-mono text-xs">
-              <div className="flex items-center justify-between text-slate-400">
-                <span>REGION // MARKET</span>
-                <span className="text-white font-bold flex items-center gap-1.5">
+            {/* Bottom Drawer Footer with Language Selector */}
+            <div className="pt-8 border-t border-white/[0.08] space-y-4">
+              <div className="flex items-center justify-between text-[11px] tracking-[0.2em] uppercase text-neutral-500">
+                <span>{t('ภาษา / LANGUAGE', 'LANGUAGE')}</span>
+                <div className="inline-flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setLang('th')}
+                    className={`transition-colors ${lang === 'th' ? 'text-white font-medium' : 'text-neutral-500 hover:text-neutral-300'}`}
+                  >
+                    ไทย (TH)
+                  </button>
+                  <span className="text-neutral-700">/</span>
+                  <button
+                    type="button"
+                    onClick={() => setLang('en')}
+                    className={`transition-colors ${lang === 'en' ? 'text-white font-medium' : 'text-neutral-500 hover:text-neutral-300'}`}
+                  >
+                    English (EN)
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-[11px] tracking-[0.2em] uppercase text-neutral-500">
+                <span>MARKET</span>
+                <span className="text-neutral-300 font-light flex items-center gap-2">
                   <span>🇹🇭</span> Thailand Official
                 </span>
               </div>

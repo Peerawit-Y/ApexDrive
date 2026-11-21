@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { products } from '../services/productService';
-import { Gauge, Zap, Flame, Cpu, BatteryCharging, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export const Categories: React.FC = () => {
+  const { t } = useLanguage();
   const rwdCars = products.filter(p => p.drivetrain === 'RWD');
   const awdCars = products.filter(p => p.drivetrain === 'AWD');
   const hybridCars = products.filter(p => p.fuel_type.includes('Hybrid'));
@@ -11,80 +13,171 @@ export const Categories: React.FC = () => {
   const naCars = products.filter(p => p.engine.includes('Naturally Aspirated'));
   const turboCars = products.filter(p => p.engine.includes('Turbo'));
 
+  const engineGroups = [
+    {
+      index: '01',
+      eyebrow: 'NATURALLY ASPIRATED',
+      title: t('เครื่องยนต์ดูดอากาศธรรมชาติ (NA)', 'Naturally Aspirated (NA)'),
+      desc: t(
+        'เสียงคำรามอันเป็นเอกลักษณ์ ลากรอบได้สูงและตอบสนองคันเร่งอย่างเป็นธรรมชาติไร้อาการรอรอบ',
+        'Pure mechanical resonance, soaring redlines, and instantaneous linear throttle response without forced induction.'
+      ),
+      cars: naCars
+    },
+    {
+      index: '02',
+      eyebrow: 'FORCED INDUCTION',
+      title: t('เทอร์โบคู่และเทอร์โบ 4 ลูก (Turbocharged)', 'Twin & Quad-Turbocharged'),
+      desc: t(
+        'ขุมพลังอัดอากาศแรงบิดมหาศาลตั้งแต่รอบต่ำ ตอบสนองอัตราเร่งฉับไวและท็อปสปีดระดับไฮเปอร์คาร์',
+        'Relentless low-end torque, blistering mid-range surge, and hypercar-grade top velocities.'
+      ),
+      cars: turboCars
+    },
+    {
+      index: '03',
+      eyebrow: 'ELECTRIFIED PERFORMANCE',
+      title: t('ปลั๊กอินไฮบริดสมรรถนะสูง (PHEV)', 'High-Performance Plug-in Hybrid (PHEV)'),
+      desc: t(
+        'การผสานเครื่องยนต์สันดาปเข้ากับมอเตอร์ไฟฟ้าเทคโนโลยีสนามแข่ง ให้พละกำลังรวมสูงสุดกว่า 1,000 แรงม้า',
+        'Motorsport-derived electric motors paired with high-output combustion engines delivering over 1,000 HP.'
+      ),
+      cars: hybridCars
+    },
+    {
+      index: '04',
+      eyebrow: 'ZERO EMISSION',
+      title: t('ยนตรกรรมพลังงานไฟฟ้า 100% (BEV)', 'Pure Electric Performance (BEV)'),
+      desc: t(
+        'แรงบิดเต็มกำลังตั้งแต่วินาทีแรกที่กดคันเร่ง ปราศจากมลพิษ พร้อมเทคโนโลยีห้องโดยสารแห่งอนาคต',
+        'Instantaneous electric torque from zero RPM, whisper-quiet refinement, and next-generation cabin technology.'
+      ),
+      cars: electricCars
+    }
+  ];
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-20 pb-16">
       
-      {/* Header */}
-      <div className="pb-2">
-        <div className="flex items-center gap-2 text-rose-500 font-mono text-xs font-bold uppercase tracking-widest">
-          <Gauge className="w-4 h-4" />
-          <span>CLASSIFICATION & ENGINEERING TAXONOMY</span>
+      {/* Editorial Header */}
+      <div className="space-y-3 pb-8 border-b border-white/[0.08]">
+        <div className="text-[11px] tracking-[0.28em] uppercase text-neutral-500">
+          ENGINEERING TAXONOMY
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-white mt-1">หมวดหมู่และระบบขับเคลื่อน</h1>
-        <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl font-normal">
-          จำแนกตามปรัชญาวิศวกรรมเครื่องยนต์และระบบส่งกำลัง เพื่อการค้นหาที่ตรงกับบุคลิกและการควบคุมที่คุณต้องการ
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-white">
+          {t('หมวดหมู่และระบบขับเคลื่อน', 'Categories & Drivetrain')}
+        </h1>
+        <p className="text-sm text-neutral-400 font-light max-w-2xl leading-relaxed">
+          {t(
+            'จำแนกตามปรัชญาวิศวกรรมเครื่องยนต์และระบบส่งกำลัง เพื่อค้นหายนตรกรรมที่สะท้อนบุคลิกการขับขี่ของคุณ',
+            'Explore our collection by powertrain philosophy and drivetrain architecture to find the character that fits your driving style.'
+          )}
         </p>
       </div>
 
-      {/* Drivetrain Categories */}
-      <section className="space-y-6">
-        <h2 className="text-lg font-mono font-bold text-white flex items-center gap-2 uppercase tracking-wider">
-          <Gauge className="w-4 h-4 text-rose-500" />
-          <span>DRIVETRAIN DYNAMICS (ระบบขับเคลื่อน)</span>
-        </h2>
+      {/* Drivetrain Dynamics */}
+      <section className="space-y-8">
+        <div className="space-y-1.5">
+          <span className="text-[11px] tracking-[0.28em] uppercase text-neutral-500">
+            DRIVETRAIN DYNAMICS
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-white">
+            {t('ระบบขับเคลื่อน', 'Drivetrain Architecture')}
+          </h2>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          {/* RWD Card */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-[#0E121B]/90 shadow-xl">
-            <div className="flex items-center justify-between">
-              <span className="px-3 py-1 bg-rose-600/20 text-rose-300 text-xs font-mono font-bold rounded-lg">
-                REAR-WHEEL DRIVE (RWD)
-              </span>
-              <span className="text-xs font-mono text-slate-400">{rwdCars.length} CHASSIS</span>
+          {/* RWD */}
+          <div className="p-8 sm:p-10 rounded-2xl bg-[#0B0C10] border border-white/[0.08] space-y-6 flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] tracking-[0.25em] uppercase text-neutral-400">
+                  REAR-WHEEL DRIVE
+                </span>
+                <span className="text-xs text-neutral-500 font-light">
+                  {t(`${rwdCars.length} รุ่น`, `${rwdCars.length} Models`)}
+                </span>
+              </div>
+              <h3 className="text-2xl font-light text-white tracking-tight">
+                {t('ขับเคลื่อนล้อหลัง (RWD)', 'Rear-Wheel Drive (RWD)')}
+              </h3>
+              <p className="text-sm text-neutral-400 font-light leading-relaxed">
+                {t(
+                  'สำหรับผู้หลงใหลการขับขี่สายเพียว ล้อหน้าทำหน้าที่บังคับทิศทางอย่างแม่นยำ ล้อหลังถ่ายทอดพละกำลังเต็มที่ มอบสัมผัสมอเตอร์สปอร์ตแท้จริง',
+                  'Crafted for driving purists. Dedicated front-wheel steering precision paired with rear-axle power delivery for authentic motorsport balance.'
+                )}
+              </p>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-              เหมาะสำหรับผู้รักการขับขี่สายเพียว ล้อหน้าทำหน้าที่เลี้ยว ล้อหลังส่งกำลัง คล่องแคล่ว ท้ายปัดได้ (Oversteer) มอบสัมผัสมอเตอร์สปอร์ตดั้งเดิม
-            </p>
-            <div className="space-y-2 pt-2 font-mono text-xs">
+
+            <div className="divide-y divide-white/[0.06] border-t border-white/[0.08] pt-2">
               {rwdCars.map(c => (
                 <Link
                   key={c.id}
                   to={`/products/${c.id}`}
-                  className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 transition-colors"
+                  className="py-4 flex items-center justify-between group"
                 >
-                  <span className="font-semibold">{c.brand} {c.model}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-amber-400 font-bold">{c.horsepower} HP</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+                  <div>
+                    <span className="text-xs tracking-widest uppercase text-neutral-500 block">
+                      {c.brand}
+                    </span>
+                    <span className="text-base font-light text-white group-hover:text-neutral-300 transition-colors">
+                      {c.model}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs text-neutral-400 font-light">
+                      {c.horsepower} HP
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-neutral-600 group-hover:text-white group-hover:translate-x-1 transition-all" />
                   </div>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* AWD Card */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-[#0E121B]/90 shadow-xl">
-            <div className="flex items-center justify-between">
-              <span className="px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-mono font-bold rounded-lg">
-                ALL-WHEEL DRIVE (AWD)
-              </span>
-              <span className="text-xs font-mono text-slate-400">{awdCars.length} CHASSIS</span>
+          {/* AWD */}
+          <div className="p-8 sm:p-10 rounded-2xl bg-[#0B0C10] border border-white/[0.08] space-y-6 flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] tracking-[0.25em] uppercase text-neutral-400">
+                  ALL-WHEEL DRIVE
+                </span>
+                <span className="text-xs text-neutral-500 font-light">
+                  {t(`${awdCars.length} รุ่น`, `${awdCars.length} Models`)}
+                </span>
+              </div>
+              <h3 className="text-2xl font-light text-white tracking-tight">
+                {t('ขับเคลื่อน 4 ล้อ (AWD)', 'All-Wheel Drive (AWD)')}
+              </h3>
+              <p className="text-sm text-neutral-400 font-light leading-relaxed">
+                {t(
+                  'ยึดเกาะถนนระดับสูงสุดด้วยระบบกระจายแรงบิดอิสระ 4 ล้อ ออกตัวฉับไวระดับทำลายสถิติ มั่นใจในทุกสภาพผิวและทางโค้งความเร็วสูง',
+                  'Maximum traction through intelligent four-wheel torque vectoring, delivering record-breaking launches and unwavering composure at speed.'
+                )}
+              </p>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-              ยึดเกาะถนนระดับสูงสุดด้วยระบบกระจายแรงบิดอิสระ 4 ล้อ ออกตัวเร็วระดับทำลายสถิติ มั่นใจในทุกสภาพผิวและทางโค้งความเร็วสูง
-            </p>
-            <div className="space-y-2 pt-2 font-mono text-xs">
+
+            <div className="divide-y divide-white/[0.06] border-t border-white/[0.08] pt-2">
               {awdCars.map(c => (
                 <Link
                   key={c.id}
                   to={`/products/${c.id}`}
-                  className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 transition-colors"
+                  className="py-4 flex items-center justify-between group"
                 >
-                  <span className="font-semibold">{c.brand} {c.model}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-rose-400 font-bold">{c.acceleration_0_100_sec}s (0-100)</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+                  <div>
+                    <span className="text-xs tracking-widest uppercase text-neutral-500 block">
+                      {c.brand}
+                    </span>
+                    <span className="text-base font-light text-white group-hover:text-neutral-300 transition-colors">
+                      {c.model}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs text-neutral-400 font-light">
+                      {t(`0–100 ใน ${c.acceleration_0_100_sec}s`, `0–100 in ${c.acceleration_0_100_sec}s`)}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-neutral-600 group-hover:text-white group-hover:translate-x-1 transition-all" />
                   </div>
                 </Link>
               ))}
@@ -94,107 +187,57 @@ export const Categories: React.FC = () => {
         </div>
       </section>
 
-      {/* Engine Types Section */}
-      <section className="space-y-6">
-        <h2 className="text-lg font-mono font-bold text-white flex items-center gap-2 uppercase tracking-wider">
-          <Zap className="w-4 h-4 text-amber-400" />
-          <span>ENGINE ARCHITECTURE (ปรัชญาเครื่องยนต์)</span>
-        </h2>
+      {/* Engine Architecture */}
+      <section className="space-y-8 pt-6 border-t border-white/[0.08]">
+        <div className="space-y-1.5">
+          <span className="text-[11px] tracking-[0.28em] uppercase text-neutral-500">
+            POWERTRAIN PHILOSOPHY
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-white">
+            {t('ปรัชญาเครื่องยนต์', 'Powertrain Philosophy')}
+          </h2>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          {/* NA Card */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-[#0E121B]/90 shadow-xl">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
-              <Flame className="w-5 h-5" />
-            </div>
-            <h3 className="text-sm font-mono font-bold text-white uppercase">Naturally Aspirated (NA)</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              เครื่องยนต์ไร้ระบบอัดอากาศ เสียงคำรามเป็นเอกลักษณ์ ลากรอบได้สูงและตอบสนองคันเร่งเป็นเส้นตรงไร้อาการรอรอบ
-            </p>
-            <div className="pt-2 text-xs font-mono text-slate-300 space-y-1.5">
-              {naCars.map(c => (
-                <Link
-                  key={c.id}
-                  to={`/products/${c.id}`}
-                  className="py-2 px-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] flex justify-between transition-colors"
-                >
-                  <span>{c.brand} {c.model}</span>
-                  <span className="text-amber-400 font-bold">{c.horsepower} HP</span>
-                </Link>
-              ))}
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {engineGroups.map(group => (
+            <div
+              key={group.index}
+              className="p-8 rounded-2xl bg-[#0B0C10] border border-white/[0.08] space-y-5 flex flex-col justify-between"
+            >
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-[11px] tracking-[0.25em] uppercase text-neutral-500">
+                  <span>{group.eyebrow}</span>
+                  <span>{group.index}</span>
+                </div>
+                <h3 className="text-xl font-light text-white tracking-tight">
+                  {group.title}
+                </h3>
+                <p className="text-sm text-neutral-400 font-light leading-relaxed">
+                  {group.desc}
+                </p>
+              </div>
 
-          {/* Turbo Card */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-[#0E121B]/90 shadow-xl">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-500 flex items-center justify-center">
-              <Zap className="w-5 h-5" />
+              <div className="divide-y divide-white/[0.06] border-t border-white/[0.08] pt-2">
+                {group.cars.map(c => (
+                  <Link
+                    key={c.id}
+                    to={`/products/${c.id}`}
+                    className="py-3.5 flex items-center justify-between group"
+                  >
+                    <span className="text-sm font-light text-neutral-200 group-hover:text-white transition-colors">
+                      {c.brand} {c.model}
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-neutral-500 font-light">
+                        {c.horsepower} HP
+                      </span>
+                      <ArrowRight className="w-3.5 h-3.5 text-neutral-600 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
-            <h3 className="text-sm font-mono font-bold text-white uppercase">Twin & Quad-Turbocharged</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              ขุมพลังอัดอากาศเทอร์โบคู่และเทอร์โบ 4 ลูก แรงบิดมหาศาลตั้งแต่รอบต่ำ ตอบสนองอัตราเร่งฉับไวและท็อปสปีดระดับไฮเปอร์คาร์
-            </p>
-            <div className="pt-2 text-xs font-mono text-slate-300 space-y-1.5">
-              {turboCars.map(c => (
-                <Link
-                  key={c.id}
-                  to={`/products/${c.id}`}
-                  className="py-2 px-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] flex justify-between transition-colors"
-                >
-                  <span>{c.brand} {c.model}</span>
-                  <span className="text-rose-400 font-bold">{c.horsepower} HP</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Hybrid Card */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-[#0E121B]/90 shadow-xl">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
-              <Cpu className="w-5 h-5" />
-            </div>
-            <h3 className="text-sm font-mono font-bold text-white uppercase">Plug-in Hybrid (PHEV)</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              การผสานเครื่องยนต์สันดาปสมรรถนะสูงเข้ากับมอเตอร์ไฟฟ้าเทคโนโลยีสนามแข่ง ให้พละกำลังรวมสูงสุดถึง 1,015 แรงม้า พร้อมโหมดขับเคลื่อนไฟฟ้า
-            </p>
-            <div className="pt-2 text-xs font-mono text-slate-300 space-y-1.5">
-              {hybridCars.map(c => (
-                <Link
-                  key={c.id}
-                  to={`/products/${c.id}`}
-                  className="py-2 px-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] flex justify-between transition-colors"
-                >
-                  <span>{c.brand} {c.model}</span>
-                  <span className="text-emerald-400 font-bold">{c.horsepower} HP</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Pure Electric (BEV) Card */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-[#0E121B]/90 shadow-xl">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center">
-              <BatteryCharging className="w-5 h-5" />
-            </div>
-            <h3 className="text-sm font-mono font-bold text-white uppercase">Pure Electric (BEV)</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              ยนตรกรรมพลังงานไฟฟ้า 100% ปล่อยมลพิษเป็นศูนย์ แรงบิดมาเต็มตั้งแต่วินาทีแรกที่กดคันเร่ง พร้อมเทคโนโลยีแบตเตอรี่และห้องโดยสารล้ำยุค
-            </p>
-            <div className="pt-2 text-xs font-mono text-slate-300 space-y-1.5">
-              {electricCars.map(c => (
-                <Link
-                  key={c.id}
-                  to={`/products/${c.id}`}
-                  className="py-2 px-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] flex justify-between transition-colors"
-                >
-                  <span>{c.brand} {c.model}</span>
-                  <span className="text-cyan-400 font-bold">{c.horsepower} HP</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
+          ))}
         </div>
       </section>
 

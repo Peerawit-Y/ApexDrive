@@ -3,15 +3,14 @@ import { Link } from 'react-router-dom';
 import { Product } from '../types/product';
 import { ProductCard } from '../components/ProductCard';
 import { products } from '../services/productService';
+import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedProduct } from '../data/productsEn';
 import { 
   ArrowRight, 
   ChevronRight,
   ChevronLeft,
   Play,
   Pause,
-  Zap,
-  Timer,
-  Gauge,
   ArrowUpRight
 } from 'lucide-react';
 
@@ -30,47 +29,48 @@ export const Home: React.FC<HomeProps> = ({
   onToggleCompare,
   onAddToCart
 }) => {
+  const { lang, t } = useLanguage();
   // Hero Carousel Slides using high-resolution images from Photo folder
   const heroSlides = [
     {
-      id: 'bugatti-chiron',
-      title: 'Chiron.',
-      subtitle: 'The 1,500 HP Quad-Turbo W16 Masterpiece',
-      image: './Photo/bugatti-chiron.jpg',
-      targetUrl: '/products/bugatti-chiron',
-      specs: { hp: '1,500 HP', acc: '0-100: 2.4s', type: 'Quad-Turbo W16' }
+      id: 'apex-x-hyper',
+      title: 'APEX X Hyper.',
+      subtitle: 'The 980 HP Hand-Built Twin-Turbo V12 Flagship',
+      image: './Photo/apex-x-hyper.jpg',
+      targetUrl: '/products/apex-x-hyper',
+      specs: { hp: '980 HP', acc: '0-100: 2.5s', type: 'Twin-Turbo V12 AWD' }
     },
     {
-      id: 'lamborghini-revuelto',
-      title: 'Revuelto.',
-      subtitle: 'The V12 Naturally Aspirated Hybrid HPEV',
-      image: './Photo/lamborghini-revuelto.jpeg',
-      targetUrl: '/products/lamborghini-revuelto',
-      specs: { hp: '1,015 HP', acc: '0-100: 2.5s', type: 'V12 PHEV e-4WD' }
+      id: 'apex-10-evo',
+      title: 'APEX 10 Evo.',
+      subtitle: 'Pure 8,700 RPM Mid-Engine Naturally Aspirated V10',
+      image: './Photo/apex-10-evo.jpg',
+      targetUrl: '/products/apex-10-evo',
+      specs: { hp: '670 HP', acc: '0-100: 2.9s', type: '5.2L V10 NA RWD' }
     },
     {
-      id: 'mercedes-amg-gt',
-      title: 'AMG GT 63 S.',
-      subtitle: 'Formula 1 Hybrid E PERFORMANCE Architecture',
-      image: './Photo/mercedes-amg-gt-63-s.png',
-      targetUrl: '/products/mercedes-amg-gt-63-s-e',
-      specs: { hp: '843 HP', acc: '0-100: 2.9s', type: 'V8 Biturbo Hybrid' }
-    },
-    {
-      id: 'bmw-m8',
-      title: 'M8 Competition.',
-      subtitle: 'Pure M TwinPower Turbo Grand Tourer',
-      image: './Photo/bmw-m8-competition-coupe.jpg',
-      targetUrl: '/products/bmw-m8-competition',
-      specs: { hp: '625 HP', acc: '0-100: 3.2s', type: 'M xDrive / 2WD' }
+      id: 'apex-gt3-track',
+      title: 'APEX GT3 Track.',
+      subtitle: '9,000 RPM Flat-6 Street-Legal Circuit Weapon',
+      image: './Photo/apex-gt3-track.jpg',
+      targetUrl: '/products/apex-gt3-track',
+      specs: { hp: '540 HP', acc: '0-100: 3.1s', type: '4.0L Flat-6 DRS' }
     },
     {
       id: 'apex-35-gt',
-      title: 'Apex 35 GT.',
-      subtitle: 'Twin-Turbocharged Precision Track Weapon',
+      title: 'APEX 35 GT.',
+      subtitle: 'Hand-Built Twin-Turbo V6 with Torque Vectoring AWD',
       image: './Photo/apex-35-gt.png',
       targetUrl: '/products/apex-35-gt',
-      specs: { hp: '600 HP', acc: '0-100: 2.7s', type: 'VR38 Twin-Turbo' }
+      specs: { hp: '620 HP', acc: '0-100: 2.8s', type: '3.8L V6 Twin-Turbo' }
+    },
+    {
+      id: 'apex-4-coupe',
+      title: 'APEX 4 Coupe.',
+      subtitle: 'Lightweight 2-Seat Carbon-Fiber Motorsport Coupe',
+      image: './Photo/apex-4-coupe.jpg',
+      targetUrl: '/products/apex-4-coupe',
+      specs: { hp: '560 HP', acc: '0-100: 3.5s', type: 'Inline-6 RWD' }
     }
   ];
 
@@ -213,26 +213,26 @@ export const Home: React.FC<HomeProps> = ({
       <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 py-20 space-y-28">
         
         {/* Curated Collection Showcase */}
-        <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2">
-            <div>
-              <div className="text-xs font-mono tracking-[0.25em] uppercase text-slate-400">
-                MODELS // SHOWROOM
+        <section className="space-y-10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/[0.08]">
+            <div className="space-y-1.5">
+              <div className="text-[11px] tracking-[0.28em] uppercase text-neutral-500">
+                FEATURED COLLECTION
               </div>
-              <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-white mt-1">
-                ยนตรกรรมระดับพรีเมียม
+              <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-white">
+                {t('ยนตรกรรมระดับพรีเมียม', 'Featured Automobiles')}
               </h2>
             </div>
             <Link
               to="/products"
-              className="text-xs font-mono tracking-wider uppercase text-slate-300 hover:text-white flex items-center gap-2 group transition-colors"
+              className="text-xs tracking-[0.2em] uppercase text-neutral-400 hover:text-white flex items-center gap-2 group transition-colors"
             >
-              <span>ดูรถทั้งหมด ({featuredProducts.length})</span>
+              <span>{t(`ดูรถทั้งหมด (${products.length})`, `View All Models (${products.length})`)}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          {/* 4-Column Product Cards (Expanded Gap & Size) */}
+          {/* 4-Column Product Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
             {featuredProducts.slice(0, 4).map((car) => (
               <ProductCard
@@ -250,61 +250,65 @@ export const Home: React.FC<HomeProps> = ({
       </div>
 
       {/* =========================================================================
-          FULL-WIDTH EDGE-TO-EDGE CAR SLIDESHOW SHOWCASE (ภาพรถสไลด์โชว์แบบเต็มขอบ)
+          FULL-WIDTH EDGE-TO-EDGE LUXURY PANORAMA SHOWCASE
           ========================================================================= */}
-      <section className="w-full relative bg-[#07090E] border-t border-b border-white/[0.08] overflow-hidden py-12 sm:py-16">
+      <section className="w-full relative bg-[#060709] border-t border-white/[0.08] overflow-hidden py-16 sm:py-24">
         
         {/* Section Header */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-rose-500">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-              <span>FULL-WIDTH VEHICLE SHOWCASE</span>
+            <div className="text-[11px] tracking-[0.3em] uppercase text-neutral-500">
+              PANORAMA GALLERY
             </div>
             <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-white">
-              คลังภาพและยนตรกรรมระดับซูเปอร์คาร์
+              {t('คลังภาพและยนตรกรรมระดับซูเปอร์คาร์', 'The Supercar Gallery')}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl font-normal">
-              สัมผัสความประณีต เส้นสาย และสมรรถนะระดับโลกของรถยนต์ในโชว์รูม ApexDrive ในมุมมองแบบพาโนรามาเต็มขอบจอ
+            <p className="text-sm text-neutral-400 font-light max-w-2xl leading-relaxed">
+              {t(
+                'สัมผัสความประณีต เส้นสาย และสมรรถนะระดับโลกของรถยนต์ในโชว์รูม ApexDrive ในมุมมองแบบพาโนรามาเต็มขอบจอ',
+                'Experience the sculpted lines, craftsmanship, and world-class performance of the ApexDrive collection in widescreen panorama.'
+              )}
             </p>
           </div>
 
-          {/* Controls: Prev, Next, Play/Pause, Slide Counter */}
-          <div className="flex items-center gap-3 self-start md:self-auto font-mono text-xs">
-            <span className="text-slate-400 font-bold px-3 py-1.5 rounded-lg bg-white/[0.05]">
+          {/* Minimalist Monochrome Controls */}
+          <div className="flex items-center gap-3 self-start md:self-auto text-xs">
+            <span className="text-neutral-400 font-light tracking-[0.2em] pr-2">
               {String(galleryIndex + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
             </span>
 
             <button
               onClick={() => setIsGalleryPlaying(!isGalleryPlaying)}
-              className="p-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border border-white/15 hover:border-white/40 text-neutral-300 hover:text-white flex items-center justify-center transition-all"
               title={isGalleryPlaying ? 'หยุดการเล่นชั่วคราว' : 'เล่นสไลด์อัตโนมัติ'}
               aria-label="Toggle Auto Play"
             >
-              {isGalleryPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+              {isGalleryPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
             </button>
 
             <button
               onClick={handlePrevGallery}
-              className="p-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] text-white transition-all hover:scale-105 active:scale-95"
+              className="w-10 h-10 rounded-full border border-white/15 hover:border-white/40 text-neutral-300 hover:text-white flex items-center justify-center transition-all"
               aria-label="Previous Slide"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
 
             <button
               onClick={handleNextGallery}
-              className="p-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white transition-all shadow-lg shadow-rose-950/40 hover:scale-105 active:scale-95"
+              className="w-10 h-10 rounded-full bg-white text-black hover:bg-neutral-200 flex items-center justify-center transition-all"
               aria-label="Next Slide"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Full-Bleed Slideshow Stage (Edge-to-Edge) */}
-        <div className="relative w-full h-[500px] sm:h-[620px] lg:h-[720px] bg-black overflow-hidden select-none">
-          {products.map((car, idx) => (
+        <div className="relative w-full h-[520px] sm:h-[640px] lg:h-[760px] bg-black overflow-hidden select-none">
+          {products.map((rawCar, idx) => {
+            const car = getLocalizedProduct(rawCar, lang);
+            return (
             <div
               key={car.id}
               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -315,124 +319,114 @@ export const Home: React.FC<HomeProps> = ({
               <img
                 src={car.image}
                 alt={`${car.brand} ${car.model}`}
-                className="w-full h-full object-cover object-center transform scale-100 hover:scale-105 transition-transform duration-7000 ease-out"
+                className="w-full h-full object-cover object-center transition-transform duration-7000 ease-out"
                 loading={idx === 0 ? 'eager' : 'lazy'}
               />
 
-              {/* Cinematic Vignette Overlays */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/40" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/60 hidden sm:block" />
+              {/* Subtle Editorial Vignette Overlays */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/30" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-transparent to-transparent hidden sm:block" />
 
-              {/* Car Info Floating Glass Card */}
-              <div className="absolute bottom-6 sm:bottom-12 left-6 sm:left-12 lg:left-20 max-w-xl z-20 space-y-4">
+              {/* Editorial Luxury Car Info Overlay */}
+              <div className="absolute bottom-8 sm:bottom-14 left-6 sm:left-12 lg:left-20 right-6 max-w-xl z-20 space-y-6">
                 
-                {/* Category & Drivetrain Badge */}
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold tracking-widest uppercase bg-rose-600 text-white">
-                    {car.brand}
-                  </span>
-                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase bg-white/20 backdrop-blur-md text-white border border-white/20">
-                    {car.category}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase bg-amber-500/20 text-amber-300">
-                    {car.drivetrain}
-                  </span>
-                </div>
-
-                {/* Car Title */}
-                <div>
-                  <h3 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-none drop-shadow-lg">
+                {/* Subtle Eyebrow & Model Title */}
+                <div className="space-y-2">
+                  <div className="text-[11px] tracking-[0.28em] uppercase text-neutral-300">
+                    {car.brand} &nbsp;·&nbsp; {car.drivetrain} &nbsp;·&nbsp; {car.category}
+                  </div>
+                  <h3 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white tracking-tight leading-none">
                     {car.model}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 mt-2 line-clamp-2 leading-relaxed drop-shadow font-normal">
+                  <p className="text-xs sm:text-sm text-neutral-300 font-light pt-1 line-clamp-2 leading-relaxed">
                     {car.description}
                   </p>
                 </div>
 
-                {/* Key Spec Badges */}
-                <div className="grid grid-cols-3 gap-2.5 pt-1 font-mono">
-                  <div className="p-2.5 sm:p-3 rounded-xl bg-black/60 backdrop-blur-md border border-white/10">
-                    <div className="flex items-center gap-1 text-[10px] text-amber-400 font-semibold">
-                      <Zap className="w-3 h-3" />
-                      <span>POWER</span>
+                {/* Crisp Hairline Telemetry Strip */}
+                <div className="grid grid-cols-3 divide-x divide-white/20 border-y border-white/15 py-4 max-w-md">
+                  <div className="pr-4">
+                    <div className="text-xl sm:text-2xl font-light text-white">
+                      {car.horsepower} <span className="text-[11px] text-neutral-400">HP</span>
                     </div>
-                    <div className="text-base sm:text-xl font-bold text-white mt-0.5">
-                      {car.horsepower} <span className="text-[10px] text-slate-400 font-normal">HP</span>
-                    </div>
-                  </div>
-
-                  <div className="p-2.5 sm:p-3 rounded-xl bg-black/60 backdrop-blur-md border border-white/10">
-                    <div className="flex items-center gap-1 text-[10px] text-rose-400 font-semibold">
-                      <Timer className="w-3 h-3" />
-                      <span>0-100 KM/H</span>
-                    </div>
-                    <div className="text-base sm:text-xl font-bold text-white mt-0.5">
-                      {car.acceleration_0_100_sec} <span className="text-[10px] text-slate-400 font-normal">s</span>
+                    <div className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 mt-0.5">
+                      {t('พละกำลัง', 'Power')}
                     </div>
                   </div>
 
-                  <div className="p-2.5 sm:p-3 rounded-xl bg-black/60 backdrop-blur-md border border-white/10">
-                    <div className="flex items-center gap-1 text-[10px] text-cyan-400 font-semibold">
-                      <Gauge className="w-3 h-3" />
-                      <span>TOP SPEED</span>
+                  <div className="px-4">
+                    <div className="text-xl sm:text-2xl font-light text-white">
+                      {car.acceleration_0_100_sec} <span className="text-[11px] text-neutral-400">s</span>
                     </div>
-                    <div className="text-base sm:text-xl font-bold text-white mt-0.5">
-                      {car.top_speed_kmh} <span className="text-[10px] text-slate-400 font-normal">km/h</span>
+                    <div className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 mt-0.5">
+                      {t('0–100 กม./ชม.', '0–100 km/h')}
+                    </div>
+                  </div>
+
+                  <div className="pl-4">
+                    <div className="text-xl sm:text-2xl font-light text-white">
+                      {car.top_speed_kmh} <span className="text-[11px] text-neutral-400">km/h</span>
+                    </div>
+                    <div className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 mt-0.5">
+                      {t('ความเร็วสูงสุด', 'Top Speed')}
                     </div>
                   </div>
                 </div>
 
-                {/* Price and CTA Button */}
-                <div className="flex flex-wrap items-center gap-4 pt-2">
+                {/* Understated Price & Pure White CTA */}
+                <div className="flex flex-wrap items-center gap-6 pt-1">
                   <Link
                     to={`/products/${car.id}`}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-xl shadow-rose-950/60 hover:scale-105 active:scale-95"
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-medium tracking-[0.15em] uppercase transition-all"
                   >
-                    <span>ดูรายละเอียดสเปก</span>
+                    <span>{t('สำรวจรุ่นนี้', 'Discover Model')}</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </Link>
 
-                  <div className="font-mono text-xs">
-                    <span className="text-[10px] text-slate-400 block uppercase">Official MSRP</span>
-                    <span className="text-lg font-black text-white">
-                      ฿{car.price.toLocaleString()} {car.currency}
+                  <div>
+                    <span className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 block">
+                      {t('เริ่มต้น', 'Starting From')}
+                    </span>
+                    <span className="text-xl font-light text-white tracking-tight">
+                      ฿{car.price.toLocaleString()} <span className="text-xs text-neutral-400">{car.currency}</span>
                     </span>
                   </div>
                 </div>
 
               </div>
             </div>
-          ))}
+            );
+          })}
 
-          {/* Left / Right Big Navigation Arrows (Hover Floating on Edges) */}
+          {/* Left / Right Minimal Floating Navigation Arrows */}
           <button
             onClick={handlePrevGallery}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 sm:p-4 rounded-full bg-black/40 hover:bg-black/75 text-white/70 hover:text-white backdrop-blur-md border border-white/10 transition-all hover:scale-110 active:scale-95"
+            className="absolute left-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/40 hover:bg-white text-white hover:text-black backdrop-blur-md border border-white/15 flex items-center justify-center transition-all"
             aria-label="Previous Slide"
           >
-            <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
 
           <button
             onClick={handleNextGallery}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 sm:p-4 rounded-full bg-black/40 hover:bg-black/75 text-white/70 hover:text-white backdrop-blur-md border border-white/10 transition-all hover:scale-110 active:scale-95"
+            className="absolute right-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/40 hover:bg-white text-white hover:text-black backdrop-blur-md border border-white/15 flex items-center justify-center transition-all"
             aria-label="Next Slide"
           >
-            <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Thumbnail Selector Strip (Full Width Scrollable) */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 mt-6">
-          <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
+        {/* Minimalist Thumbnail Selector Strip */}
+        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 mt-8">
+          <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar">
             {products.map((car, idx) => (
               <button
                 key={car.id}
                 onClick={() => setGalleryIndex(idx)}
-                className={`relative shrink-0 w-24 sm:w-32 h-16 sm:h-20 rounded-xl overflow-hidden transition-all border-2 ${
+                className={`relative shrink-0 w-28 sm:w-36 h-16 sm:h-20 rounded-xl overflow-hidden transition-all border ${
                   galleryIndex === idx
-                    ? 'border-rose-500 scale-105 shadow-lg shadow-rose-950/50'
-                    : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
+                    ? 'border-white opacity-100'
+                    : 'border-white/10 opacity-45 hover:opacity-90 hover:border-white/30'
                 }`}
               >
                 <img
@@ -440,9 +434,9 @@ export const Home: React.FC<HomeProps> = ({
                   alt={car.model}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-1.5">
-                  <span className="text-[9px] font-mono font-bold text-white truncate w-full text-left">
-                    {car.brand} {car.model}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex items-end p-2">
+                  <span className="text-[10px] font-light tracking-wide text-white truncate w-full text-left">
+                    {car.model}
                   </span>
                 </div>
               </button>

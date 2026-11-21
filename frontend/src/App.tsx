@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Product, CartItem } from './types/product';
 import { getFeaturedProducts, products } from './services/productService';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CartModal } from './components/CartModal';
+import { FloatingCompareBar } from './components/FloatingCompareBar';
+import { Toast, ToastMessage } from './components/Toast';
 
 // Pages
 import { Home } from './pages/Home';
@@ -15,10 +18,81 @@ import { Compare } from './pages/Compare';
 import { About } from './pages/About';
 import { FAQ } from './pages/FAQ';
 
-export const App: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [compareIds, setCompareIds] = useState<string[]>([]);
+const CART_STORAGE_KEY = 'apexdrive-cart-v1';
+const COMPARE_STORAGE_KEY = 'apexdrive-compare-v1';
+
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  }, [pathname]);
+
+  return null;
+};
+
+const loadStoredCart = (): CartItem[] => {
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed: Array<{ id: string; quantity: number }> = JSON.parse(raw);
+    return parsed
+      .map(entry => {
+        const product = products.find(p => p.id === entry.id);
+        return product ? { product, quantity: Math.max(1, entry.quantity || 1) } : null;
+      })
+      .filter((item): item is CartItem => item !== null);
+  } catch {
+    return [];
+  }
+};
+
+const loadStoredCompare = (): string[] => {
+  try {
+    const raw = localStorage.getItem(COMPARE_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed: string[] = JSON.parse(raw);
+    return parsed.filter(id => products.some(p => p.id === id)).slice(0, 4);
+  } catch {
+    return [];
+  }
+};
+
+const AppContent: React.FC = () => {
+  const { t } = useLanguage();
+  const [cartItems, setCartItems] = useState<CartItem[]>(loadStoredCart);
+  const [compareIds, setCompareIds] = useState<string[]>(loadStoredCompare);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [toast, setToast] = useState<ToastMessage | null>(null);
+
+  // Persist cartItems & compareIds to localStorage
+  useEffect(() => {
+    try {
+      const compact = cartItems.map(item => ({ id: item.product.id, quantity: item.quantity }));
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(compact));
+    } catch {
+      // ignore storage errors
+    }
+  }, [cartItems]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(compareIds));
+    } catch {
+      // ignore storage errors
+    }
+  }, [compareIds]);
+
+  // Auto-dismiss Toast
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 3200);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const showToast = useCallback((text: string) => {
+    setToast({ id: Date.now(), text });
+  }, []);
 
   // Cart Handlers
   const handleAddToCart = (product: Product) => {
@@ -44,18 +118,27 @@ export const App: React.FC = () => {
     setCartItems([]);
   };
 
-  // Compare Handlers (Max 4 items)
+  // Compare Handlers (Max 4 items with Luxury Toast instead of alert)
   const handleToggleCompare = (product: Product) => {
-    setCompareIds(prev => {
-      if (prev.includes(product.id)) {
-        return prev.filter(id => id !== product.id);
-      }
-      if (prev.length >= 4) {
-        alert('สามารถเปรียบเทียบรถยนต์ได้สูงสุดพร้อมกัน 4 คันครับ');
-        return prev;
-      }
-      return [...prev, product.id];
-    });
+    if (compareIds.includes(product.id)) {
+      setCompareIds(prev => prev.filter(id => id !== product.id));
+      showToast(
+        t(`นำ ${product.model} ออกจากการเปรียบเทียบแล้ว`, `Removed ${product.model} from comparison`)
+      );
+      return;
+    }
+
+    if (compareIds.length >= 4) {
+      showToast(
+        t('สามารถเปรียบเทียบรถยนต์ได้สูงสุดพร้อมกัน 4 คัน', 'You can compare up to 4 vehicles at once')
+      );
+      return;
+    }
+
+    setCompareIds(prev => [...prev, product.id]);
+    showToast(
+      t(`เพิ่ม ${product.model} ลงตารางเปรียบเทียบแล้ว`, `Added ${product.model} to comparison`)
+    );
   };
 
   const handleRemoveFromCompare = (id: string) => {
@@ -66,12 +149,15 @@ export const App: React.FC = () => {
     setCompareIds([]);
   };
 
-  const comparedProducts = products.filter(p => compareIds.includes(p.id));
+  const comparedProducts = compareIds
+    .map(id => products.find(p => p.id === id))
+    .filter((p): p is Product => Boolean(p));
   const featured = getFeaturedProducts();
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-brand-dark text-slate-100 relative overflow-x-hidden">
+      <ScrollToTop />
+      <div className="min-h-screen flex flex-col bg-[#060709] text-neutral-100 relative overflow-x-hidden">
         
         {/* Navigation Bar */}
         <Navbar
@@ -79,6 +165,9 @@ export const App: React.FC = () => {
           compareCount={compareIds.length}
           onOpenCart={() => setIsCartOpen(true)}
         />
+
+        {/* Luxury Toast Notification */}
+        <Toast toast={toast} onDismiss={() => setToast(null)} />
 
         {/* Main Content Area */}
         <main className="flex-1 w-full">
@@ -163,7 +252,14 @@ export const App: React.FC = () => {
         {/* Global Footer */}
         <Footer />
 
-        {/* Cart Modal */}
+        {/* Floating Quick Compare Bar */}
+        <FloatingCompareBar
+          products={comparedProducts}
+          onRemove={handleRemoveFromCompare}
+          onClear={handleClearCompare}
+        />
+
+        {/* Cart & Private Viewing Reservation Modal */}
         <CartModal
           isOpen={isCartOpen}
           items={cartItems}
@@ -174,6 +270,14 @@ export const App: React.FC = () => {
 
       </div>
     </Router>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 };
 

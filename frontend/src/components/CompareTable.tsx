@@ -1,7 +1,9 @@
 import React from 'react';
 import { Product } from '../types/product';
-import { X, Zap, Timer, Gauge, Award, ChevronRight } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedProduct } from '../data/productsEn';
 
 interface CompareTableProps {
   products: Product[];
@@ -10,136 +12,178 @@ interface CompareTableProps {
 }
 
 export const CompareTable: React.FC<CompareTableProps> = ({
-  products,
+  products: rawProducts,
   onRemove,
   onClear
 }) => {
+  const { lang, t } = useLanguage();
+  const products = rawProducts.map(p => getLocalizedProduct(p, lang));
+
   if (products.length === 0) {
     return (
-      <div className="glass-panel p-12 rounded-3xl text-center max-w-xl mx-auto my-12 space-y-4">
-        <Award className="w-12 h-12 text-slate-600 mx-auto" />
-        <h3 className="text-xl font-bold text-white">ยังไม่มีรถยนต์ในตารางเปรียบเทียบ</h3>
-        <p className="text-xs text-slate-400 font-mono leading-relaxed">
-          เลือกกดปุ่ม "เปรียบเทียบ" จากหน้ารายการสินค้าเพื่อนำรถยนต์รุ่นที่ท่านสนใจ (สูงสุด 4 คัน) มาเปรียบเทียบสเปกและสมรรถนะเคียงข้างกัน
+      <div className="py-24 px-6 rounded-2xl border border-white/[0.08] bg-[#0B0C10] text-center max-w-2xl mx-auto space-y-5">
+        <p className="text-[11px] tracking-[0.28em] uppercase text-neutral-500">
+          COMPARISON MATRIX
         </p>
-        <Link
-          to="/products"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg shadow-rose-950/40 transition-colors"
-        >
-          <span>ไปเลือกดูรถยนต์ในโชว์รูม</span>
-          <ChevronRight className="w-4 h-4" />
-        </Link>
+        <h3 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
+          {t('ยังไม่มีรถยนต์ในตารางเปรียบเทียบ', 'No Vehicles Selected for Comparison')}
+        </h3>
+        <p className="text-sm text-neutral-400 font-light max-w-md mx-auto leading-relaxed">
+          {t(
+            'เลือกกดไอคอนเปรียบเทียบจากหน้ารายการรถยนต์เพื่อนำยนตรกรรมที่ท่านสนใจมาเทียบสเปกเคียงข้างกันได้สูงสุด 4 คัน',
+            'Select the compare icon on any vehicle in the showroom to evaluate up to 4 models side by side.'
+          )}
+        </p>
+        <div className="pt-3">
+          <Link
+            to="/products"
+            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-medium tracking-[0.15em] uppercase transition-all"
+          >
+            <span>{t('เลือกชมยนตรกรรมในโชว์รูม', 'Explore the Collection')}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
     );
   }
 
-  // Find best values to highlight
   const maxHp = Math.max(...products.map(p => p.horsepower));
   const minAcc = Math.min(...products.map(p => p.acceleration_0_100_sec));
   const maxTopSpeed = Math.max(...products.map(p => p.top_speed_kmh));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between font-mono text-xs text-slate-400">
+    <div className="space-y-8">
+      <div className="flex items-center justify-between text-xs tracking-wider text-neutral-500">
         <span>
-          COMPARING <strong className="text-white font-bold">{products.length}</strong> / 4 CHASSIS
+          {t('กำลังเปรียบเทียบ', 'Comparing')} <strong className="text-white font-medium">{products.length}</strong> / 4 {t('รุ่น', 'Models')}
         </span>
         <button
           onClick={onClear}
-          className="text-rose-400 hover:text-rose-300 font-semibold underline underline-offset-4"
+          className="text-neutral-400 hover:text-white underline underline-offset-4 transition-colors"
         >
-          ล้างรายการเปรียบเทียบทั้งหมด
+          {t('ล้างรายการทั้งหมด', 'Clear All')}
         </button>
       </div>
 
       <div className="overflow-x-auto pb-4">
-        <table className="w-full text-left">
+        <table className="w-full text-left border-collapse">
           <thead>
-            <tr>
-              <th className="p-4 bg-transparent text-left text-xs font-mono font-bold text-slate-400 w-48 uppercase tracking-wider">
-                SPECIFICATION / CHASSIS
+            <tr className="border-b border-white/[0.1]">
+              <th className="py-6 pr-6 text-left text-[11px] tracking-[0.22em] uppercase text-neutral-500 font-normal w-52 align-bottom">
+                {t('ข้อมูลจำเพาะ', 'Specification')}
               </th>
               {products.map(p => (
-                <th key={p.id} className="p-4 min-w-[240px] text-left align-top">
-                  <div className="relative bg-[#0E121B] p-4 rounded-2xl shadow-xl">
-                    <button
-                      onClick={() => onRemove(p.id)}
-                      className="absolute top-2 right-2 p-1.5 rounded-full bg-neutral-900/80 hover:bg-rose-600 text-slate-400 hover:text-white transition-colors"
-                      title="นำออก"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                    <img
-                      src={p.image}
-                      alt={p.model}
-                      className="w-full h-32 object-cover rounded-xl mb-3"
-                    />
-                    <div className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-widest">{p.brand}</div>
-                    <div className="text-sm font-bold text-white">{p.model}</div>
-                    <div className="text-xs font-mono font-bold text-white mt-1">
-                      ฿{p.price.toLocaleString()} <span className="text-[10px] text-slate-400 font-normal">THB</span>
+                <th key={p.id} className="p-4 min-w-[240px] text-left align-top font-normal">
+                  <div className="relative space-y-4">
+                    <div className="relative overflow-hidden rounded-xl aspect-[16/10] bg-[#07080B]">
+                      <img
+                        src={p.image}
+                        alt={p.model}
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        onClick={() => onRemove(p.id)}
+                        className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/60 backdrop-blur-md hover:bg-white text-neutral-300 hover:text-black flex items-center justify-center transition-colors"
+                        title={t('นำออก', 'Remove')}
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-[10px] tracking-[0.22em] uppercase text-neutral-500">
+                        {p.brand}
+                      </div>
+                      <div className="text-lg font-light text-white tracking-tight">
+                        {p.model}
+                      </div>
+                      <div className="text-sm font-light text-neutral-300 pt-0.5">
+                        ฿{p.price.toLocaleString()} <span className="text-[10px] text-neutral-500">THB</span>
+                      </div>
                     </div>
                   </div>
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="text-xs font-mono">
+
+          <tbody className="divide-y divide-white/[0.08] text-sm font-light">
             
             {/* Horsepower */}
-            <tr className="bg-white/[0.02]">
-              <td className="p-4 font-medium text-slate-300 flex items-center gap-2">
-                <Zap className="w-3.5 h-3.5 text-amber-400" />
-                <span>พละกำลัง (Horsepower)</span>
+            <tr>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('พละกำลัง (Horsepower)', 'Horsepower')}
               </td>
               {products.map(p => (
-                <td key={p.id} className={`p-4 font-bold ${p.horsepower === maxHp ? 'text-amber-400 bg-amber-500/10 rounded-lg' : 'text-slate-200'}`}>
-                  {p.horsepower} HP {p.horsepower === maxHp && <span className="ml-1.5 text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono">PEAK</span>}
+                <td key={p.id} className="p-4">
+                  <span className={p.horsepower === maxHp ? 'text-white font-medium' : 'text-neutral-300'}>
+                    {p.horsepower.toLocaleString()} HP
+                  </span>
+                  {p.horsepower === maxHp && products.length > 1 && (
+                    <span className="ml-2.5 text-[10px] tracking-[0.18em] uppercase text-amber-200/90 border border-amber-200/30 px-2 py-0.5 rounded-full">
+                      {t('สูงสุด', 'Peak')}
+                    </span>
+                  )}
                 </td>
               ))}
             </tr>
 
             {/* Acceleration */}
             <tr>
-              <td className="p-4 font-medium text-slate-300 flex items-center gap-2">
-                <Timer className="w-3.5 h-3.5 text-rose-400" />
-                <span>0-100 กม./ชม. (Accel)</span>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('อัตราเร่ง 0–100 กม./ชม.', '0–100 km/h')}
               </td>
               {products.map(p => (
-                <td key={p.id} className={`p-4 font-bold ${p.acceleration_0_100_sec === minAcc ? 'text-emerald-400 bg-emerald-500/10 rounded-lg' : 'text-slate-200'}`}>
-                  {p.acceleration_0_100_sec} วินาที {p.acceleration_0_100_sec === minAcc && <span className="ml-1.5 text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono">FASTEST</span>}
+                <td key={p.id} className="p-4">
+                  <span className={p.acceleration_0_100_sec === minAcc ? 'text-white font-medium' : 'text-neutral-300'}>
+                    {t(`${p.acceleration_0_100_sec} วินาที`, `${p.acceleration_0_100_sec} s`)}
+                  </span>
+                  {p.acceleration_0_100_sec === minAcc && products.length > 1 && (
+                    <span className="ml-2.5 text-[10px] tracking-[0.18em] uppercase text-amber-200/90 border border-amber-200/30 px-2 py-0.5 rounded-full">
+                      {t('เร็วที่สุด', 'Fastest')}
+                    </span>
+                  )}
                 </td>
               ))}
             </tr>
 
             {/* Top Speed */}
-            <tr className="bg-white/[0.02]">
-              <td className="p-4 font-medium text-slate-300 flex items-center gap-2">
-                <Gauge className="w-3.5 h-3.5 text-cyan-400" />
-                <span>ความเร็วสูงสุด (Top Speed)</span>
+            <tr>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('ความเร็วสูงสุด', 'Top Speed')}
               </td>
               {products.map(p => (
-                <td key={p.id} className={`p-4 font-bold ${p.top_speed_kmh === maxTopSpeed ? 'text-cyan-400 bg-cyan-500/10 rounded-lg' : 'text-slate-200'}`}>
-                  {p.top_speed_kmh} กม./ชม. {p.top_speed_kmh === maxTopSpeed && <span className="ml-1.5 text-[9px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded font-mono">V-MAX</span>}
+                <td key={p.id} className="p-4">
+                  <span className={p.top_speed_kmh === maxTopSpeed ? 'text-white font-medium' : 'text-neutral-300'}>
+                    {t(`${p.top_speed_kmh} กม./ชม.`, `${p.top_speed_kmh} km/h`)}
+                  </span>
+                  {p.top_speed_kmh === maxTopSpeed && products.length > 1 && (
+                    <span className="ml-2.5 text-[10px] tracking-[0.18em] uppercase text-amber-200/90 border border-amber-200/30 px-2 py-0.5 rounded-full">
+                      {t('สูงสุด', 'V-Max')}
+                    </span>
+                  )}
                 </td>
               ))}
             </tr>
 
             {/* Torque */}
             <tr>
-              <td className="p-4 font-medium text-slate-300">แรงบิดสูงสุด (Torque)</td>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('แรงบิดสูงสุด (Torque)', 'Max Torque')}
+              </td>
               {products.map(p => (
-                <td key={p.id} className="p-4 text-slate-200">
-                  {p.torque_nm} Nm
+                <td key={p.id} className="p-4 text-neutral-300">
+                  {p.torque_nm.toLocaleString()} Nm
                 </td>
               ))}
             </tr>
 
             {/* Engine */}
-            <tr className="bg-white/[0.02]">
-              <td className="p-4 font-medium text-slate-300">สถาปัตยกรรมเครื่องยนต์</td>
+            <tr>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('เครื่องยนต์', 'Engine')}
+              </td>
               {products.map(p => (
-                <td key={p.id} className="p-4 text-slate-300">
+                <td key={p.id} className="p-4 text-neutral-300">
                   {p.engine}
                 </td>
               ))}
@@ -147,19 +191,23 @@ export const CompareTable: React.FC<CompareTableProps> = ({
 
             {/* Drivetrain */}
             <tr>
-              <td className="p-4 font-medium text-slate-300">ระบบขับเคลื่อน</td>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('ระบบขับเคลื่อน', 'Drivetrain')}
+              </td>
               {products.map(p => (
-                <td key={p.id} className="p-4 font-bold text-amber-300">
+                <td key={p.id} className="p-4 text-white">
                   {p.drivetrain}
                 </td>
               ))}
             </tr>
 
             {/* Transmission */}
-            <tr className="bg-white/[0.02]">
-              <td className="p-4 font-medium text-slate-300">ระบบส่งกำลัง (Gearbox)</td>
+            <tr>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('ระบบส่งกำลัง', 'Transmission')}
+              </td>
               {products.map(p => (
-                <td key={p.id} className="p-4 text-slate-300">
+                <td key={p.id} className="p-4 text-neutral-300">
                   {p.transmission}
                 </td>
               ))}
@@ -167,24 +215,29 @@ export const CompareTable: React.FC<CompareTableProps> = ({
 
             {/* Seats */}
             <tr>
-              <td className="p-4 font-medium text-slate-300">ห้องโดยสาร (Cabin)</td>
+              <td className="py-5 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('ห้องโดยสาร', 'Seating')}
+              </td>
               {products.map(p => (
-                <td key={p.id} className="p-4 text-slate-300">
-                  {p.seats} ที่นั่ง {p.seats > 2 ? '(2+2 GT)' : '(2 ที่นั่ง Pure Sport)'}
+                <td key={p.id} className="p-4 text-neutral-300">
+                  {t(`${p.seats} ที่นั่ง`, `${p.seats} Seats`)}
                 </td>
               ))}
             </tr>
 
             {/* Detail Link Row */}
-            <tr className="bg-white/[0.02]">
-              <td className="p-4 font-medium text-slate-300">ข้อมูลจำเพาะเชิงลึก</td>
+            <tr>
+              <td className="py-6 pr-6 text-xs tracking-wider uppercase text-neutral-500">
+                {t('รายละเอียดเพิ่มเติม', 'Details')}
+              </td>
               {products.map(p => (
                 <td key={p.id} className="p-4">
                   <Link
                     to={`/products/${p.id}`}
-                    className="inline-block w-full py-2.5 px-3 text-center bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-mono font-bold uppercase tracking-wider transition-colors shadow-md hover:scale-105 active:scale-95"
+                    className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-full border border-white/15 hover:bg-white hover:text-black text-white text-xs tracking-[0.15em] uppercase transition-all"
                   >
-                    ดูสเปกเต็ม
+                    <span>{t('สำรวจรุ่นนี้', 'Discover')}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </td>
               ))}
