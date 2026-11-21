@@ -36,7 +36,7 @@ export const Home: React.FC<HomeProps> = ({
       id: 'bugatti-chiron',
       title: 'Chiron.',
       subtitle: 'The 1,500 HP Quad-Turbo W16 Masterpiece',
-      image: '/Photo/bugatti-chiron.jpg',
+      image: './Photo/bugatti-chiron.jpg',
       targetUrl: '/products/bugatti-chiron',
       specs: { hp: '1,500 HP', acc: '0-100: 2.4s', type: 'Quad-Turbo W16' }
     },
@@ -44,7 +44,7 @@ export const Home: React.FC<HomeProps> = ({
       id: 'lamborghini-revuelto',
       title: 'Revuelto.',
       subtitle: 'The V12 Naturally Aspirated Hybrid HPEV',
-      image: '/Photo/Lamborghini Revuelto.jpeg',
+      image: './Photo/lamborghini-revuelto.jpeg',
       targetUrl: '/products/lamborghini-revuelto',
       specs: { hp: '1,015 HP', acc: '0-100: 2.5s', type: 'V12 PHEV e-4WD' }
     },
@@ -52,7 +52,7 @@ export const Home: React.FC<HomeProps> = ({
       id: 'mercedes-amg-gt',
       title: 'AMG GT 63 S.',
       subtitle: 'Formula 1 Hybrid E PERFORMANCE Architecture',
-      image: '/Photo/mercedes-amg-gt-63-s.png',
+      image: './Photo/mercedes-amg-gt-63-s.png',
       targetUrl: '/products/mercedes-amg-gt-63-s-e',
       specs: { hp: '843 HP', acc: '0-100: 2.9s', type: 'V8 Biturbo Hybrid' }
     },
@@ -60,7 +60,7 @@ export const Home: React.FC<HomeProps> = ({
       id: 'bmw-m8',
       title: 'M8 Competition.',
       subtitle: 'Pure M TwinPower Turbo Grand Tourer',
-      image: '/Photo/bmw-m8-competition-coupe.jpg',
+      image: './Photo/bmw-m8-competition-coupe.jpg',
       targetUrl: '/products/bmw-m8-competition',
       specs: { hp: '625 HP', acc: '0-100: 3.2s', type: 'M xDrive / 2WD' }
     },
@@ -68,7 +68,7 @@ export const Home: React.FC<HomeProps> = ({
       id: 'apex-35-gt',
       title: 'Apex 35 GT.',
       subtitle: 'Twin-Turbocharged Precision Track Weapon',
-      image: '/Photo/apex-35-gt.png',
+      image: './Photo/apex-35-gt.png',
       targetUrl: '/products/apex-35-gt',
       specs: { hp: '600 HP', acc: '0-100: 2.7s', type: 'VR38 Twin-Turbo' }
     }

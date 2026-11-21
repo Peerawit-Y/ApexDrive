@@ -26,7 +26,7 @@
       "โครงสร้าง Bugatti Line ตัว C และปีกหลังแอคทีฟทำหน้าที่เป็นแอร์เบรก (Airbrake)",
       "ยางพิเศษ Michelin Pilot Sport Cup 2 รองรับแรงเหวี่ยงความเร็วเกิน 400 กม./ชม."
     ],
-    "image": "/Photo/bugatti-chiron.jpg",
+    "image": "./Photo/bugatti-chiron.jpg",
     "sources": [
       "Car.txt - [CAR-019] Bugatti Chiron",
       "Bugatti Official Technical Specifications"
@@ -59,7 +59,7 @@
       "ประตูปีกนก Scissor Doors เอกลักษณ์ระดับตำนานของซูเปอร์คาร์ V12 Sant'Agata Bolognese",
       "แบตเตอรี่ Lithium-ion 3.8 kWh วางกลางอุโมงค์เกียร์ รองรับโหมดขับขี่ไฟฟ้าล้วน (Città Mode)"
     ],
-    "image": "/Photo/Lamborghini Revuelto.jpeg",
+    "image": "./Photo/lamborghini-revuelto.jpeg",
     "sources": [
       "Car.txt - [CAR-020] Lamborghini Revuelto",
       "Automobili Lamborghini S.p.A. Official Technical Data"
@@ -92,7 +92,7 @@
       "ระบบเลี้ยวล้อหลัง (Active Rear-Axle Steering) และช่วงล่างถุงลม AMG RIDE CONTROL+",
       "ระบบเบรกคาร์บอนเซรามิกประสิทธิภาพสูง AMG Ceramic High-Performance Composite"
     ],
-    "image": "/Photo/mercedes-amg-gt-63-s.png",
+    "image": "./Photo/mercedes-amg-gt-63-s.png",
     "sources": [
       "Car.txt - [CAR-004] Mercedes-AMG GT 63 S E PERFORMANCE",
       "Mercedes-Benz Thailand Official Technical Data"
@@ -125,7 +125,7 @@
       "ระบบเบรกคาร์บอนเซรามิกทนความร้อนสูงพิเศษสำหรับการขับขี่แบบ Track Day",
       "สปอยเลอร์หลังคาร์บอนไฟเบอร์สร้างแรงกดท้ายสูงในย่านความเร็วมากกว่า 300 กม./ชม."
     ],
-    "image": "/Photo/apex-35-gt.png",
+    "image": "./Photo/apex-35-gt.png",
     "sources": [
       "Car.txt - [CUSTOM-001] APEX 35 GT",
       "APEX Motors Engineering Department"
@@ -158,7 +158,7 @@
       "เบาะนั่ง M Carbon Bucket Seats หุ้มหนังแท้ Full Merino Leather ประณีตสูงสุด",
       "ปุ่ม M Mode และ M Setup บนพวงมาลัย บันทึกโปรไฟล์การขับขี่ส่วนตัวได้ 2 รูปแบบ (M1/M2)"
     ],
-    "image": "/Photo/bmw-m8-competition-coupe.jpg",
+    "image": "./Photo/bmw-m8-competition-coupe.jpg",
     "sources": [
       "Car.txt - [CAR-006] BMW M8 Competition Coupe",
       "BMW Thailand Official Technical Data"
@@ -191,7 +191,7 @@
       "ระบบควบคุมการดริฟต์ (M Drift Analyzer) และ Traction Control ปรับละเอียด 10 ระดับ",
       "การตอบสนองพวงมาลัยเฉียบคม มอบสัมผัสการสื่อสารพื้นถนนได้อย่างแม่นยำในสนามแข่ง"
     ],
-    "image": "/Photo/apex-4-coupe.jpg",
+    "image": "./Photo/apex-4-coupe.jpg",
     "sources": [
       "Car.txt - [CUSTOM-002] APEX 4 Coupe",
       "APEX Motors Engineering Department"
@@ -224,7 +224,7 @@
       "โครงสร้างตัวถังห้องโดยสาร Carbon Core แข็งแกร่งแต่น้ำหนักเบา",
       "โหมดขับขี่ไฟฟ้าล้วน (eDrive) ปราศจากมลพิษ และระบบแสดงผล Head-Up Display ล้ำสมัย"
     ],
-    "image": "/Photo/BMW-i8.jpg",
+    "image": "./Photo/bmw-i8.jpg",
     "sources": [
       "Car.txt - [CAR-007] BMW i8 Coupe",
       "BMW Group Classic & Technical Archive"
@@ -257,7 +257,7 @@
       "โครงสร้างตัวถัง CTB (Cell-to-Body) เสริมความแข็งแกร่งและลดจุดศูนย์ถ่วงลงใกล้พื้นถนน",
       "ระบบควบคุมการกระจายแรงบิดอัจฉริยะ iTAC และช่วงล่างปรับความหนืดอัตโนมัติ FSD"
     ],
-    "image": "/Photo/byd-seal-performance-awd.png",
+    "image": "./Photo/byd-seal-performance-awd.png",
     "sources": [
       "Car.txt - [CAR-003] BYD Seal Performance AWD (2026)",
       "BYD Official Thailand Specifications"
@@ -290,7 +290,7 @@
       "ระบบแสดงผลบนกระจกหน้าแบบเสมือนจริง AR-HUD (Augmented Reality Head-Up Display)",
       "หน้าจอสัมผัสกลางขนาด 15.6 นิ้ว Sunflower Screen ปรับหมุนเอียงองศาหาผู้ขับขี่อัตโนมัติ"
     ],
-    "image": "/Photo/deepal-s07.png",
+    "image": "./Photo/deepal-s07.png",
     "sources": [
       "Car.txt - [CAR-008] Deepal S07 (2026)",
       "Changan Deepal Thailand Official Data"
@@ -324,7 +324,7 @@
       "โหมดการขับขี่ Track Mode สำหรับฝึกทักษะการดริฟต์และควบคุมอาการท้ายรถในสนามแข่ง",
       "สถานะสต็อกในโชว์รูม: ปัจจุบันมีรถพร้อมส่งมอบจำนวน 6 คัน"
     ],
-    "image": "/Photo/Toyota GR86.png",
+    "image": "./Photo/toyota-gr86.png",
     "sources": [
       "Car.txt - [CAR-013] Toyota GR 86 (2026)",
       "TOYOTA GAZOO Racing Official Specifications"
