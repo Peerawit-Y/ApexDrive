@@ -58,10 +58,11 @@ export default {
       return Response.json({ error: "รับเฉพาะ POST" }, { status: 405, headers: cors });
     }
 
-    // ตรวจว่าเรียกมาจากเว็บที่อนุญาต
-    if (origin && !ALLOWED.includes(origin)) {
+    // ตรวจว่าเรียกมาจากเว็บที่อนุญาต (ต้องมี Origin และอยู่ใน allowlist เท่านั้น
+    // กันสคริปต์/บอทภายนอกที่ไม่ส่ง Origin header มาเรียกตรงๆแล้วข้ามการตรวจสอบนี้ไปได้)
+    if (!ALLOWED.includes(origin)) {
       return Response.json(
-        { error: `โดเมน ${origin} ไม่ได้รับอนุญาต  แก้รายการ ALLOWED ในไฟล์ worker.js` },
+        { error: `โดเมน ${origin || "(ไม่ระบุ)"} ไม่ได้รับอนุญาต  แก้รายการ ALLOWED ในไฟล์ worker.js` },
         { status: 403, headers: cors }
       );
     }
