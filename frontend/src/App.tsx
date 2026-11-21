@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import { CartModal } from './components/CartModal';
 import { FloatingCompareBar } from './components/FloatingCompareBar';
 import { Toast, ToastMessage } from './components/Toast';
+import { ChatConcierge } from './components/ChatConcierge';
 
 // Pages
 import { Home } from './pages/Home';
@@ -258,6 +259,9 @@ const AppContent: React.FC = () => {
           onRemove={handleRemoveFromCompare}
           onClear={handleClearCompare}
         />
+
+        {/* Private AI Concierge Chatbot */}
+        <ChatConcierge />
 
         {/* Cart & Private Viewing Reservation Modal */}
         <CartModal

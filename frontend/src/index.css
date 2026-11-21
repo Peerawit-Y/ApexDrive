@@ -59,3 +59,19 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
+
+/* Smooth Luxury Popup Entrance */
+@keyframes luxuryPopupIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-luxury-popup {
+  animation: luxuryPopupIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
