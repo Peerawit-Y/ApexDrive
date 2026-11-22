@@ -14,8 +14,16 @@ export interface ChatResponse {
  * if available; otherwise answers directly from the verified ApexDrive catalog so the UI works immediately.
  */
 export async function askConcierge(query: string, lang: Language): Promise<ChatResponse> {
-  // Slight natural delay for luxury conversational cadence
-  await new Promise(resolve => setTimeout(resolve, 480));
+  // Primary path: RAG pipeline (Cloudflare Worker + docs/)
+  try {
+    const rag = await askRag(query, lang);
+    if (rag) return rag;
+  } catch (err) {
+    console.warn('RAG Worker unavailable, falling back to local catalog:', err);
+  }
+
+  // Fallback: rule-based answers from local catalog when Worker is unreachable
+  await new Promise(resolve => setTimeout(resolve, 300));
 
   const q = query.toLowerCase();
   const localized = products.map(p => getLocalizedProduct(p, lang));
@@ -135,16 +143,7 @@ export async function askConcierge(query: string, lang: Language): Promise<ChatR
     };
   }
 
-  // None of the known patterns matched — try RAG for open-ended questions
-  // (e.g. financing, contact info, warranty) that the docs cover but the rules above don't
-  try {
-    const rag = await askRag(query, lang);
-    if (rag) return rag;
-  } catch {
-    // Fall through to the default response below
-  }
-
-  // Default helpful concierge response
+  // Default helpful concierge response when both RAG and local rules don't match
   return {
     text: isEn
       ? `I am your ApexDrive Private Concierge. I can assist you with technical specifications, horsepower & acceleration rankings, head-to-head model comparisons, or tailored recommendations across all ${products.length} vehicles in our showroom.\n\nTry asking about a specific model (e.g. "APEX X Hyper" or "APEX 35 GT") or your driving preference.`

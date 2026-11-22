@@ -24,9 +24,9 @@ export const ChatConcierge: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const quickPrompts = [
-    t('รุ่นไหนแรงม้ามากที่สุด?', 'Which model has the most HP?'),
-    t('เทียบ APEX X Hyper กับ APEX 10 Evo', 'Compare APEX X Hyper vs APEX 10 Evo'),
-    t('แนะนำรถขับใช้งานทุกวัน งบไม่เกิน 3 ล้าน', 'Best daily car under ฿3M?'),
+    t('รุ่นไหนแรงม้ามากที่สุดและราคาเท่าไร?', 'Which model has the most HP and what is its price?'),
+    t('APEX 10 Evo ผ่อน 60 งวดเดือนละเท่าไร?', 'How much is the 60-month installment for APEX 10 Evo?'),
+    t('เงื่อนไขเงินจองและทดลองขับเป็นอย่างไร?', 'What are the reservation and test-drive terms?'),
     t('มีรุ่นขับเคลื่อน 4 ล้อ (AWD) รุ่นไหนบ้าง?', 'Which models are AWD?')
   ];
 
@@ -201,6 +201,22 @@ export const ChatConcierge: React.FC = () => {
                 <X className="w-4 h-4" />
               </button>
             </div>
+          </div>
+
+          {/* Mandatory AI Ethics & Human Contact Notice Banner */}
+          <div className="px-5 py-2 bg-amber-500/[0.08] border-b border-amber-400/15 text-[11px] text-amber-200/85 font-light flex items-center justify-between gap-2">
+            <span>
+              {t(
+                'AI ตอบจากเอกสารโชว์รูม · ติดต่อเจ้าหน้าที่จริง:',
+                'AI answers from showroom docs · Human staff:'
+              )}
+            </span>
+            <a
+              href="tel:021998899"
+              className="text-amber-300 hover:text-white underline underline-offset-2 shrink-0 transition-colors"
+            >
+              02-199-8899
+            </a>
           </div>
 
           {/* Messages Area */}

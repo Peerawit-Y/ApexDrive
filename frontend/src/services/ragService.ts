@@ -7,7 +7,7 @@ const DOCS_BASE = (ENV?.VITE_DOCS_BASE || 'docs').replace(/\/+$/, '');
 // Worker URL ไม่ใช่ความลับ (เป็นที่อยู่สาธารณะ ป้องกันด้วย CORS origin check ใน worker.js อยู่แล้ว)
 // ใส่เป็นค่า default ไว้ตรงนี้เพื่อให้ build บน GitHub Pages ใช้งานได้ทันทีโดยไม่ต้องพึ่งไฟล์ .env ที่ไม่ถูก push ขึ้น git
 // กุญแจจริง (Gemini API key) ไม่ได้อยู่ในไฟล์นี้หรือที่ไหนในโค้ด — เก็บเป็น Secret บน Cloudflare เท่านั้น
-const DEFAULT_WORKER_URL = 'https://apexdrive-chatbot.peerawit-y-apexdrive.workers.dev';
+const DEFAULT_WORKER_URL = 'https://apexdrive-chatbot.ppeerawit789.workers.dev';
 const WORKER_URL = (ENV?.VITE_WORKER_URL || DEFAULT_WORKER_URL).replace(/\/+$/, '');
 const AI_MODEL = ENV?.VITE_AI_MODEL || 'gemini-flash-lite-latest';
 
@@ -105,8 +105,10 @@ function buildPrompt(question: string, found: Chunk[], lang: Language): string {
   const docs = found.map((f, i) => `[${i + 1} / ${f.source}]\n${f.text}`).join('\n\n');
 
   if (lang === 'en') {
-    return `You are the ApexDrive Private Concierge for a luxury sports car showroom.
-Answer using ONLY the documents below. If they don't contain the answer, say you don't have that information and suggest contacting the showroom.
+    return `You are the ApexDrive Private Concierge for the APEX Sports showroom.
+Answer using ONLY the documents below.
+If the documents do not contain the answer, say you do not have that information in the showroom documents and suggest contacting our staff at 02-199-8899 or 089-888-9900.
+Do not guess and do not add facts from general knowledge.
 Answer concisely in English.
 
 Documents:
@@ -116,8 +118,10 @@ Question:
 ${question}`;
   }
 
-  return `คุณคือ ApexDrive Private Concierge ผู้ช่วยของโชว์รูมรถสปอร์ต
-ให้ตอบโดยใช้เฉพาะข้อมูลในเอกสารด้านล่างเท่านั้น ถ้าเอกสารไม่มีคำตอบ ให้บอกว่าไม่พบข้อมูลนี้และแนะนำให้ติดต่อโชว์รูม
+  return `คุณคือ ApexDrive Private Concierge ผู้ช่วยตอบคำถามของโชว์รูม APEX Sports
+ให้ตอบโดยใช้เฉพาะข้อมูลในเอกสารด้านล่างเท่านั้น
+ถ้าเอกสารไม่มีคำตอบ ให้ตอบว่าไม่พบข้อมูลนี้ในเอกสารของโชว์รูม และแนะนำให้ติดต่อเจ้าหน้าที่ โทร 02-199-8899 หรือ 089-888-9900
+ห้ามเดา ห้ามเติมข้อมูลจากความรู้ทั่วไป
 ตอบเป็นภาษาไทย สั้น กระชับ สุภาพ
 
 เอกสาร:
