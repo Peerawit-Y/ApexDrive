@@ -21,7 +21,8 @@ const ALLOWED = [
 
 // เส้นทางที่ยอมให้ส่งต่อ  กันไม่ให้เรียก endpoint อื่นของ Gemini
 // หน้าตาที่ยอม  เช่น  /v1beta/models/gemini-2.0-flash:generateContent
-const ALLOWED_PATH = /^\/v1beta\/models\/[a-zA-Z0-9.\-]+:generateContent$/;
+// เปิด embedContent/batchEmbedContents เพิ่ม  ใช้ตอนสร้าง vectors.json และตอนแปลงคำถามเป็นเวกเตอร์
+const ALLOWED_PATH = /^\/v1beta\/models\/[a-zA-Z0-9.\-]+:(generateContent|embedContent|batchEmbedContents)$/;
 
 const UPSTREAM = "https://generativelanguage.googleapis.com";
 
