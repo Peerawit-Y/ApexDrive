@@ -229,12 +229,9 @@ export const ChatConcierge: React.FC = () => {
                 'AI answers from showroom docs · Human staff:'
               )}
             </span>
-            <a
-              href="tel:021998899"
-              className="text-amber-300 hover:text-white underline underline-offset-2 shrink-0 transition-colors"
-            >
-              02-199-8899
-            </a>
+            <span className="text-amber-300 shrink-0">
+              02-XXX-XXXX
+            </span>
           </div>
 
           {/* Messages Area */}

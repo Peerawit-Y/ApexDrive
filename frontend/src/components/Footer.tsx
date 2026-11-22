@@ -52,7 +52,7 @@ export const Footer: React.FC = () => {
               )}
             </p>
             <div className="pt-2 text-xs text-neutral-400 font-light">
-              APEX Sports Concierge &nbsp;·&nbsp; 02-199-8899 / 089-888-9900
+              APEX Sports Concierge &nbsp;·&nbsp; 02-XXX-XXXX / 089-XXX-XXXX
             </div>
           </div>
 

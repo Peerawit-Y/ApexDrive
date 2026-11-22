@@ -59,8 +59,8 @@ export const FAQ: React.FC = () => {
     {
       q: t('ติดต่อโชว์รูม APEX Sports ได้ทางช่องทางไหนบ้าง?', 'How can I contact the APEX Sports showroom?'),
       a: t(
-        'ติดต่อโชว์รูม APEX Sports (สาขาบางคูวัด ถ.ราชพฤกษ์-ปทุมธานี ทางหลวง 345 จ.ปทุมธานี) โทร 02-199-8899 / สายด่วนฝ่ายขาย 089-888-9900 หรือ LINE Official: @apexsports.th เปิดบริการทุกวัน 09:00 - 18:00 น.',
-        'Contact APEX Sports Showroom (Bang Khu Wat, Highway 345, Pathum Thani) at 02-199-8899 / Sales Hotline 089-888-9900 or LINE Official: @apexsports.th, daily 09:00–18:00.'
+        'ติดต่อโชว์รูม APEX Sports (สาขาบางคูวัด ถ.ราชพฤกษ์-ปทุมธานี ทางหลวง 345 จ.ปทุมธานี) โทร 02-XXX-XXXX / สายด่วนฝ่ายขาย 089-XXX-XXXX หรือ LINE Official: @apexsports.th เปิดบริการทุกวัน 09:00 - 18:00 น.',
+        'Contact APEX Sports Showroom (Bang Khu Wat, Highway 345, Pathum Thani) at 02-XXX-XXXX / Sales Hotline 089-XXX-XXXX or LINE Official: @apexsports.th, daily 09:00–18:00.'
       )
     }
   ];
@@ -127,18 +127,17 @@ export const FAQ: React.FC = () => {
           </h4>
           <p className="text-xs sm:text-sm text-neutral-400 font-light">
             {t(
-              'ติดต่อทีมงาน APEX Sports Concierge ได้โดยตรงที่ 02-199-8899 / 089-888-9900 หรือ LINE: @apexsports.th ทุกวัน 09:00 – 18:00 น.',
-              'Contact APEX Sports Concierge at 02-199-8899 / 089-888-9900 or LINE: @apexsports.th, daily 09:00 – 18:00.'
+              'ติดต่อทีมงาน APEX Sports Concierge ได้โดยตรงที่ 02-XXX-XXXX / 089-XXX-XXXX หรือ LINE: @apexsports.th ทุกวัน 09:00 – 18:00 น.',
+              'Contact APEX Sports Concierge at 02-XXX-XXXX / 089-XXX-XXXX or LINE: @apexsports.th, daily 09:00 – 18:00.'
             )}
           </p>
         </div>
-        <a
-          href="tel:021998899"
-          className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-medium tracking-[0.15em] uppercase shrink-0 transition-all"
+        <span
+          className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-white text-black text-xs font-medium tracking-[0.15em] uppercase shrink-0"
         >
           <PhoneCall className="w-3.5 h-3.5" />
-          <span>{t('ติดต่อฝ่ายขาย', 'Call Concierge')}</span>
-        </a>
+          <span>02-XXX-XXXX</span>
+        </span>
       </div>
 
     </div>

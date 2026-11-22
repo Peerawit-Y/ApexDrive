@@ -259,7 +259,7 @@ function buildPrompt(
   if (lang === 'en') {
     return `You are the ApexDrive Private Concierge for the APEX Sports showroom.
 Answer using ONLY the documents below.
-If the documents do not contain the answer, say you do not have that information in the showroom documents and suggest contacting our staff at 02-199-8899 or 089-888-9900.
+If the documents do not contain the answer, say you do not have that information in the showroom documents and suggest contacting our staff at 02-XXX-XXXX or 089-XXX-XXXX.
 Do not guess and do not add facts from general knowledge.
 Give a complete, clear, polite answer in English (plain text without markdown asterisks).
 ${historyBlock}
@@ -272,7 +272,7 @@ ${question}`;
 
   return `คุณคือ ApexDrive Private Concierge ผู้ช่วยตอบคำถามของโชว์รูม APEX Sports
 ให้ตอบโดยใช้เฉพาะข้อมูลในเอกสารด้านล่างเท่านั้น
-ถ้าเอกสารไม่มีคำตอบ ให้ตอบว่าไม่พบข้อมูลนี้ในเอกสารของโชว์รูม และแนะนำให้ติดต่อเจ้าหน้าที่ โทร 02-199-8899 หรือ 089-888-9900
+ถ้าเอกสารไม่มีคำตอบ ให้ตอบว่าไม่พบข้อมูลนี้ในเอกสารของโชว์รูม และแนะนำให้ติดต่อเจ้าหน้าที่ โทร 02-XXX-XXXX หรือ 089-XXX-XXXX
 ห้ามเดา ห้ามเติมข้อมูลจากความรู้ทั่วไป
 ตอบเป็นภาษาไทยให้ครบถ้วน ชัดเจน กระชับ สุภาพ (ไม่ต้องใช้เครื่องหมาย ** Markdown)
 ${historyBlock}
