@@ -11,6 +11,22 @@ interface Message {
   text: string;
   citations?: string[];
   recommendedIds?: string[];
+  searchMode?: 'vector' | 'local';
+}
+
+/** Render **bold** inline without leaking raw markdown asterisks */
+function renderFormattedText(text: string): React.ReactNode {
+  const segments = text.split(/(\*\*[^*]+\*\*)/g);
+  return segments.map((seg, i) => {
+    if (seg.startsWith('**') && seg.endsWith('**') && seg.length > 4) {
+      return (
+        <strong key={i} className="font-medium text-white">
+          {seg.slice(2, -2)}
+        </strong>
+      );
+    }
+    return seg;
+  });
 }
 
 export const ChatConcierge: React.FC = () => {
@@ -59,18 +75,20 @@ export const ChatConcierge: React.FC = () => {
       text
     };
 
+    const recentHistory = messages.slice(-4).map(m => ({ role: m.role, text: m.text }));
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
 
     try {
-      const response = await askConcierge(text, lang);
+      const response = await askConcierge(text, lang, recentHistory);
       const aiMsg: Message = {
         id: `a-${Date.now()}`,
         role: 'assistant',
         text: response.text,
         citations: response.citations,
-        recommendedIds: response.recommendedIds
+        recommendedIds: response.recommendedIds,
+        searchMode: response.searchMode
       };
       setMessages(prev => [...prev, aiMsg]);
     } catch {
@@ -277,7 +295,7 @@ export const ChatConcierge: React.FC = () => {
                         : 'bg-white/[0.04] border border-white/[0.08] text-neutral-200 font-light rounded-bl-sm'
                     }`}
                   >
-                    {msg.text}
+                    {msg.role === 'assistant' ? renderFormattedText(msg.text) : msg.text}
                   </div>
 
                   {/* Clickable Car Mini-Cards inside AI Reply */}
@@ -309,10 +327,17 @@ export const ChatConcierge: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Understated Citations */}
+                  {/* Understated Citations & Search Mode */}
                   {msg.citations && msg.citations.length > 0 && (
-                    <div className="max-w-[88%] text-[10px] text-neutral-600 font-light tracking-wide pl-1">
-                      {t('อ้างอิง:', 'Source:')} {msg.citations.join(' · ')}
+                    <div className="max-w-[88%] text-[10px] text-neutral-500 font-light tracking-wide pl-1 space-y-0.5">
+                      {msg.searchMode && (
+                        <span className="inline-block mr-1.5 px-1.5 py-0.5 rounded bg-white/[0.06] text-[9px] uppercase tracking-wider text-emerald-400/90">
+                          {msg.searchMode === 'vector' ? 'Vector Search' : 'Local Search'}
+                        </span>
+                      )}
+                      <span>
+                        {t('อ้างอิง:', 'Source:')} {msg.citations.join(' · ')}
+                      </span>
                     </div>
                   )}
                 </div>

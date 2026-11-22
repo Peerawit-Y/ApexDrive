@@ -1,22 +1,27 @@
 import { products } from './productService';
 import { getLocalizedProduct } from '../data/productsEn';
 import { Language } from '../context/LanguageContext';
-import { askRag } from './ragService';
+import { askRag, HistoryTurn } from './ragService';
 
 export interface ChatResponse {
   text: string;
   citations?: string[];
   recommendedIds?: string[];
+  searchMode?: 'vector' | 'local';
 }
 
 /**
  * Queries the RAG pipeline (Cloudflare Worker + APEXSports docs, configured via VITE_WORKER_URL)
  * if available; otherwise answers directly from the verified ApexDrive catalog so the UI works immediately.
  */
-export async function askConcierge(query: string, lang: Language): Promise<ChatResponse> {
+export async function askConcierge(
+  query: string,
+  lang: Language,
+  history: HistoryTurn[] = []
+): Promise<ChatResponse> {
   // Primary path: RAG pipeline (Cloudflare Worker + docs/)
   try {
-    const rag = await askRag(query, lang);
+    const rag = await askRag(query, lang, history);
     if (rag) return rag;
   } catch (err) {
     console.warn('RAG Worker unavailable, falling back to local catalog:', err);
