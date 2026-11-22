@@ -72,8 +72,10 @@ export async function askConcierge(query: string, lang: Language): Promise<ChatR
   }
 
   // 3. Daily driving / budget / beginner
+  // ไม่จับคำถามที่ถามเรื่องผ่อน/ดาวน์/ดอกเบี้ย เพราะตัวเลขผ่อนจริงมีแค่ใน RAG docs เท่านั้น
+  const asksInstallment = /ผ่อน|ดาวน์|งวด|ดอกเบี้ย|installment|monthly payment|down payment/i.test(q);
   const budgetMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:ล้าน|m\b)/i);
-  if (q.includes('ทุกวัน') || q.includes('งบ') || q.includes('ถูก') || q.includes('daily') || q.includes('budget') || q.includes('beginner') || budgetMatch) {
+  if (!asksInstallment && (q.includes('ทุกวัน') || q.includes('งบ') || q.includes('ถูก') || q.includes('daily') || q.includes('budget') || q.includes('beginner') || budgetMatch)) {
     const budgetBaht = budgetMatch ? parseFloat(budgetMatch[1]) * 1_000_000 : null;
     const sorted = [...localized].sort((a, b) => a.price - b.price);
     const withinBudget = budgetBaht ? sorted.filter(p => p.price <= budgetBaht) : sorted;

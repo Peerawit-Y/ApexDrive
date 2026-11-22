@@ -1,4 +1,5 @@
 import { Language } from '../context/LanguageContext';
+import { products } from './productService';
 
 const ENV = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
 
@@ -10,10 +11,12 @@ const DOCS_BASE = (ENV?.VITE_DOCS_BASE || 'docs').replace(/\/+$/, '');
 const DEFAULT_WORKER_URL = 'https://apexdrive-chatbot.ppeerawit789.workers.dev';
 const WORKER_URL = (ENV?.VITE_WORKER_URL || DEFAULT_WORKER_URL).replace(/\/+$/, '');
 const AI_MODEL = ENV?.VITE_AI_MODEL || 'gemini-flash-lite-latest';
+const EMBED_MODEL = 'gemini-embedding-001';
+const VECTORS_FILE = 'vectors.json';
 
 const CHUNK_SIZE = 500;
 const OVERLAP = 100;
-const TOP_K = 4;
+const TOP_K = 14;
 
 // เอกสารความรู้ของโชว์รูม APEX Sports — วางไว้ที่ frontend/public/docs/
 const FILES = [
@@ -31,6 +34,7 @@ const FILES = [
   '12-contact-and-faq.txt',
   '13-catalog-summary.txt',
   '14-test-drive-and-warranty.txt',
+  '15-installment-summary.txt',
 ];
 
 interface Chunk {
@@ -101,6 +105,72 @@ async function searchChunks(question: string): Promise<Chunk[]> {
     .map(({ i }) => chunks[i]);
 }
 
+// ---------- โหมด vector (ค้นด้วยความหมาย ใช้ vectors.json ที่สร้างไว้ล่วงหน้า) ----------
+
+interface VectorChunk extends Chunk {
+  v: number[];
+}
+
+interface VectorsFile {
+  model: string;
+  dim: number;
+  chunks: VectorChunk[];
+}
+
+let vectorsPromise: Promise<VectorsFile | null> | null = null;
+
+async function loadVectors(): Promise<VectorsFile | null> {
+  if (!vectorsPromise) {
+    vectorsPromise = (async () => {
+      try {
+        const res = await fetch(VECTORS_FILE);
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (!data.chunks || !data.chunks.length) return null;
+        return data as VectorsFile;
+      } catch {
+        return null;
+      }
+    })();
+  }
+  return vectorsPromise;
+}
+
+async function embedQuestion(question: string, dim: number): Promise<number[]> {
+  const res = await fetch(`${WORKER_URL}/v1beta/models/${EMBED_MODEL}:embedContent`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      content: { parts: [{ text: question }] },
+      outputDimensionality: dim,
+    }),
+  });
+  if (!res.ok) throw new Error(`Embedding ไม่สำเร็จ: ${res.status}`);
+  const data = await res.json();
+  const v: number[] | undefined = data.embedding?.values;
+  if (!v) throw new Error('ไม่ได้เวกเตอร์กลับมา');
+  const n = Math.hypot(...v);
+  return v.map(x => x / n);
+}
+
+/** ลองค้นด้วยเวกเตอร์ก่อน (แม่นกว่า เข้าใจความหมาย) ถ้าไม่มี vectors.json หรือ embed ไม่สำเร็จ ให้ถอยไปค้นแบบ n-gram แทน */
+async function searchBestChunks(question: string): Promise<Chunk[]> {
+  const vectors = await loadVectors();
+  if (!vectors) return searchChunks(question);
+
+  try {
+    const qv = await embedQuestion(question, vectors.dim);
+    return vectors.chunks
+      .map((c, i) => ({ i, score: c.v.reduce((s, x, k) => s + x * qv[k], 0) }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, TOP_K)
+      .map(({ i }) => vectors.chunks[i]);
+  } catch (e) {
+    console.warn('ค้นด้วยเวกเตอร์ไม่สำเร็จ ถอยไปใช้การเทียบตัวอักษรแทน:', e);
+    return searchChunks(question);
+  }
+}
+
 function buildPrompt(question: string, found: Chunk[], lang: Language): string {
   const docs = found.map((f, i) => `[${i + 1} / ${f.source}]\n${f.text}`).join('\n\n');
 
@@ -131,8 +201,6 @@ ${docs}
 ${question}`;
 }
 
-const PRODUCT_FILE_ID = /^\d+-(apex-[a-z0-9-]+)\.txt$/;
-
 export interface RagResult {
   text: string;
   citations: string[];
@@ -143,7 +211,7 @@ export interface RagResult {
 export async function askRag(question: string, lang: Language): Promise<RagResult | null> {
   if (!WORKER_URL) return null;
 
-  const found = await searchChunks(question);
+  const found = await searchBestChunks(question);
   if (!found.length) return null;
 
   const res = await fetch(`${WORKER_URL}/v1beta/models/${AI_MODEL}:generateContent`, {
@@ -161,13 +229,12 @@ export async function askRag(question: string, lang: Language): Promise<RagResul
   if (!text) throw new Error('Empty response from worker');
 
   const citations = Array.from(new Set(found.map(f => f.source)));
-  const recommendedIds = Array.from(
-    new Set(
-      found
-        .map(f => f.source.match(PRODUCT_FILE_ID)?.[1])
-        .filter((id): id is string => Boolean(id))
-    )
-  );
+  // สแกนหาชื่อรุ่นที่ AI พูดถึงจริงในคำตอบทั้งหมด (ไม่จำกัดแค่ไฟล์ที่ retrieve มา)
+  // เพื่อให้การ์ดรถตรงกับสิ่งที่ตอบจริงเสมอ ไม่ใช่ไฟล์ที่ค้นเจอแต่ AI ไม่ได้พูดถึง
+  const lowerText = text.toLowerCase();
+  const recommendedIds = products
+    .filter(p => lowerText.includes(p.model.toLowerCase()))
+    .map(p => p.id);
 
   return { text, citations, recommendedIds };
 }
