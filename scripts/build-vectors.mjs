@@ -10,7 +10,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const WORKER_URL = process.argv[2] || 'https://apexdrive-chatbot.peerawit-y-apexdrive.workers.dev';
+const WORKER_URL = process.argv[2] || 'https://apexdrive-chatbot.ppeerawit789.workers.dev';
 const EMBED_MODEL = 'gemini-embedding-001';
 const OUTPUT_DIM = 768;
 const CHUNK_SIZE = 500;
@@ -55,7 +55,7 @@ function unit(v) {
   return v.map(x => +(x / n).toFixed(6));
 }
 
-async function embedBatch(texts) {
+async function embedBatch(texts, attempt = 1) {
   const res = await fetch(`${WORKER_URL}/v1beta/models/${EMBED_MODEL}:batchEmbedContents`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Origin: 'http://localhost:5173' },
@@ -67,10 +67,33 @@ async function embedBatch(texts) {
       })),
     }),
   });
+  if (res.status === 429 && attempt <= 3) {
+    const body = await res.text();
+    const match = body.match(/"retryDelay"\s*:\s*"(\d+)s"/);
+    const waitSec = (match ? parseInt(match[1], 10) : 35) + 2;
+    console.log(`ติดโควตา 429 — รอ ${waitSec} วินาทีแล้วลองใหม่ (รอบที่ ${attempt})...`);
+    await new Promise(r => setTimeout(r, waitSec * 1000));
+    return embedBatch(texts, attempt + 1);
+  }
   if (!res.ok) throw new Error(`Worker ตอบ ${res.status}: ${await res.text()}`);
   const data = await res.json();
   if (!data.embeddings) throw new Error(`ไม่ได้ embeddings กลับมา: ${JSON.stringify(data)}`);
   return data.embeddings.map(e => e.values);
+}
+
+async function loadExistingCache() {
+  const cache = new Map();
+  try {
+    const prev = JSON.parse(await readFile(OUTPUT_FILE, 'utf-8'));
+    if (prev.model === EMBED_MODEL && prev.dim === OUTPUT_DIM && Array.isArray(prev.chunks)) {
+      for (const c of prev.chunks) {
+        if (c.text && Array.isArray(c.v)) cache.set(c.text, c.v);
+      }
+    }
+  } catch {
+    // ไม่มีไฟล์เก่า — สร้างใหม่ทั้งหมด
+  }
+  return cache;
 }
 
 async function main() {
@@ -82,12 +105,27 @@ async function main() {
   }
   console.log(`หั่นได้ ${chunks.length} ชิ้น จาก ${FILES.length} ไฟล์`);
 
-  const vectors = [];
-  for (let i = 0; i < chunks.length; i += BATCH_SIZE) {
-    const batch = chunks.slice(i, i + BATCH_SIZE);
-    console.log(`แปลงเป็นเวกเตอร์ ${i + 1}-${i + batch.length} / ${chunks.length} ...`);
-    const embeddings = await embedBatch(batch.map(c => c.text));
-    embeddings.forEach((v, j) => vectors.push({ ...batch[j], v: unit(v) }));
+  const cache = await loadExistingCache();
+  const vectors = new Array(chunks.length);
+  const toEmbed = [];
+  chunks.forEach((c, idx) => {
+    const cached = cache.get(c.text);
+    if (cached) {
+      vectors[idx] = { ...c, v: cached };
+    } else {
+      toEmbed.push({ idx, chunk: c });
+    }
+  });
+  console.log(`ใช้เวกเตอร์เดิม ${chunks.length - toEmbed.length} ชิ้น · แปลงใหม่ ${toEmbed.length} ชิ้น`);
+
+  for (let i = 0; i < toEmbed.length; i += BATCH_SIZE) {
+    const batch = toEmbed.slice(i, i + BATCH_SIZE);
+    console.log(`แปลงเป็นเวกเตอร์ ${i + 1}-${i + batch.length} / ${toEmbed.length} ...`);
+    const embeddings = await embedBatch(batch.map(b => b.chunk.text));
+    embeddings.forEach((v, j) => {
+      const { idx, chunk } = batch[j];
+      vectors[idx] = { ...chunk, v: unit(v) };
+    });
   }
 
   const out = {
