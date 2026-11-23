@@ -1,7 +1,7 @@
 import { products } from './productService';
 import { getLocalizedProduct } from '../data/productsEn';
 import { Language } from '../context/LanguageContext';
-import { askRag, HistoryTurn } from './ragService';
+import { askRag, detectQueryLang, HistoryTurn } from './ragService';
 
 export interface ChatResponse {
   text: string;
@@ -30,9 +30,10 @@ export async function askConcierge(
   // Fallback: rule-based answers from local catalog when Worker is unreachable
   await new Promise(resolve => setTimeout(resolve, 300));
 
+  const effectiveLang = detectQueryLang(query, lang);
   const q = query.toLowerCase();
-  const localized = products.map(p => getLocalizedProduct(p, lang));
-  const isEn = lang === 'en';
+  const localized = products.map(p => getLocalizedProduct(p, effectiveLang));
+  const isEn = effectiveLang === 'en';
 
   // 1. Specific model mention(s)
   const mentioned = localized.filter(

@@ -1,0 +1,52 @@
+[CUSTOM-004] APEX 86 Spirit
+
+1. Basic Specs of APEX 86 Spirit (Metadata & Basic Specs)
+   - Info code: CUSTOM-004
+   - Model: APEX 86 Spirit
+   - Brand: APEX Sports
+   - Car type: Lightweight Boxer Sports Coupe
+   - Drive system: Naturally Aspirated Flat-4 / Rear-Wheel Drive (RWD)
+   - Seats: 4 (2+2)
+   - Selling price of APEX 86 Spirit: 2,990,000 THB
+
+2. Powertrain, Performance & Fuel of APEX 86 Spirit
+   - 2.4L flat-4 boxer petrol engine, no forced induction
+   - Max power 255 hp, max torque 275 Nm
+   - 6-speed close-ratio manual gearbox, rear-wheel drive (RWD) with Torsen LSD
+   - 0-100 km/h in 5.8 seconds
+   - Supported fuel: unleaded petrol octane 95 or higher (Petrol 95 / Gasohol 95 recommended), 50-liter fuel tank
+
+3. Key Highlights & Technology of APEX 86 Spirit
+   - The boxer engine is mounted extremely low, giving the lowest center of gravity in its class and sharp cornering with no body roll
+   - Body weighs only 1,260 kg, so balance is natural to control with the throttle and steering
+   - Rear seats fold flat into the cargo area, fitting 4 spare wheels and tires for the track comfortably
+
+4. Target Audience & Use Case of APEX 86 Spirit
+   - Beginners learning RWD sports driving, drift fans, and fans of lightweight sports cars that are easy to maintain
+
+5. Considerations & Limitations of APEX 86 Spirit
+   - No turbo, so low-rpm acceleration is smooth and you need to rev the engine high to reach max power
+   - Road and tire noise insulation in the cabin is moderate, in line with a lightweight-focused sports car
+
+6. Stock Status and Remaining Colors of APEX 86 Spirit
+   - APEX 86 Spirit ready for delivery: 7 left
+   - Colors in stock: Halo White (white, 3 cars), Ignition Red (red, 2 cars), Trueno Blue (blue, 2 cars)
+
+7. Financing and Interest Information of APEX 86 Spirit
+   - APEX 86 Spirit financing limit: up to 75% of car price (max loan 2,242,500 THB / min down payment 25% = 747,500 THB)
+   - Interest rate: starts at 2.09% - 2.79% per year (depends on down payment and installment period)
+
+8. Monthly Payment Table for APEX 86 Spirit (Price 2,990,000 THB / 25% down = 747,500 THB / loan 2,242,500 THB)
+   - APEX 86 Spirit 48-month plan (2.09% interest): 50,624 THB/month
+   - APEX 86 Spirit 60-month plan (2.44% interest): 41,935 THB/month
+   - APEX 86 Spirit 72-month plan (2.79% interest): 36,360 THB/month
+
+9. Warranty of APEX 86 Spirit
+   - APEX 86 Spirit warranty period: 4 years or 120,000 km (whichever comes first)
+   - APEX 86 Spirit coverage: 2.4L Flat-4 engine, 6-speed manual gearbox, Torsen LSD, suspension system, and main electronics (excludes tires, brake pads, wear-and-tear fluids, and damage from misuse)
+
+10. Service Schedule of APEX 86 Spirit
+   - APEX 86 Spirit service interval: every 10,000 km or every 6 months (whichever comes first)
+   - At 1,000 km (APEX 86 Spirit): free basic checkup
+   - At 10,000 / 30,000 / 50,000 km (APEX 86 Spirit): change engine oil and oil filter; check the brake system and suspension
+   - At 20,000 / 40,000 / 60,000 km (APEX 86 Spirit): also change manual transmission oil, differential oil, brake fluid, and air filter

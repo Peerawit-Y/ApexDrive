@@ -1,0 +1,21 @@
+Summary of all cars at APEX Sports showroom (10 models in total)
+
+The APEX Sports showroom sells only internal combustion engine (ICE) petrol sports cars and supercars, with no EVs or hybrids. There are 10 models in total, priced from 2,990,000 THB to 45,900,000 THB, listed from lowest to highest price:
+
+1. APEX 86 Spirit (CUSTOM-004): 2,990,000 THB (cheapest) | 4-seat coupe, RWD | 255 hp | 0-100 in 5.8 s | 7 left
+2. APEX 2 Clubsport (CUSTOM-003): 5,690,000 THB | 4-seat coupe, RWD | 480 hp | 0-100 in 3.9 s | 6 left
+3. APEX 4 Coupe (CUSTOM-002): 7,450,000 THB | lightweight 2-seat coupe, RWD | 560 hp | 0-100 in 3.5 s | 5 left
+4. APEX 35 GT (CUSTOM-001): 11,900,000 THB | 4-seat coupe, AWD | 620 hp | 0-100 in 2.8 s | 4 left
+5. APEX 5 Touring (CUSTOM-005): 12,800,000 THB | 5-seat wagon, AWD | 650 hp | 0-100 in 3.2 s | 3 left
+6. APEX SUV RS (CUSTOM-009): 14,900,000 THB | 5-seat super SUV, AWD | 680 hp | 0-100 in 3.3 s | 4 left
+7. APEX 8 Vantage (CUSTOM-006): 15,900,000 THB | 2-seat grand tourer, RWD | 665 hp | 0-100 in 3.4 s | 3 left
+8. APEX GT3 Track (CUSTOM-010): 17,500,000 THB | 2-seat street-legal track racer, RWD | 540 hp | 0-100 in 3.1 s | 2 left
+9. APEX 10 Evo (CUSTOM-007): 19,800,000 THB | 2-seat V10 supercar, RWD | 670 hp | 0-100 in 2.9 s | 2 left
+10. APEX X Hyper (CUSTOM-008): 45,900,000 THB (most expensive and most powerful) | 2-seat V12 hypercar, AWD | 980 hp | 0-100 in 2.5 s | 1 left
+
+Quick buying highlights for APEX Sports cars:
+- Powertrain type: all models use 100% petrol internal combustion engines (no EVs or hybrids).
+- Cheapest and good for beginners: APEX 86 Spirit (2,990,000 THB).
+- Highest horsepower and fastest 0-100 km/h: APEX X Hyper (980 hp, 2.5 seconds).
+- 5-seat models for family and extra cargo: APEX 5 Touring (wagon) and APEX SUV RS (SUV).
+- All-Wheel Drive (AWD) models: APEX 35 GT, APEX 5 Touring, APEX SUV RS, APEX X Hyper.

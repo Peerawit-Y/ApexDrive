@@ -7,18 +7,20 @@
  * ถ้าไม่ใส่ WORKER_URL จะใช้ค่า default ด้านล่าง
  */
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const WORKER_URL = process.argv[2] || 'https://apexdrive-chatbot.ppeerawit789.workers.dev';
+const isEn = process.argv.includes('--en');
+const urlArg = process.argv.slice(2).find(a => a.startsWith('http'));
+const WORKER_URL = urlArg || 'https://apexdrive-chatbot.ppeerawit789.workers.dev';
 const EMBED_MODEL = 'gemini-embedding-001';
 const OUTPUT_DIM = 768;
 const CHUNK_SIZE = 500;
 const OVERLAP = 100;
 const BATCH_SIZE = 20; // จำนวนชิ้นต่อการยิง batchEmbedContents หนึ่งครั้ง
 
-const DOCS_DIR = path.join(process.cwd(), 'frontend/public/docs');
-const OUTPUT_FILE = path.join(process.cwd(), 'frontend/public/vectors.json');
+const DOCS_DIR = path.join(process.cwd(), isEn ? 'frontend/public/docs-en' : 'frontend/public/docs');
+const OUTPUT_FILE = path.join(process.cwd(), isEn ? 'frontend/public/vectors-en.json' : 'frontend/public/vectors.json');
 
 const FILES = [
   '01-apex-35-gt.txt',
@@ -98,12 +100,13 @@ async function loadExistingCache() {
 
 async function main() {
   console.log('อ่านเอกสาร...');
+  const files = (await readdir(DOCS_DIR)).filter(f => f.endsWith('.txt')).sort();
   const chunks = [];
-  for (const file of FILES) {
+  for (const file of files) {
     const text = (await readFile(path.join(DOCS_DIR, file), 'utf-8')).trim();
     chunks.push(...chunkText(text, file));
   }
-  console.log(`หั่นได้ ${chunks.length} ชิ้น จาก ${FILES.length} ไฟล์`);
+  console.log(`หั่นได้ ${chunks.length} ชิ้น จาก ${files.length} ไฟล์`);
 
   const cache = await loadExistingCache();
   const vectors = new Array(chunks.length);

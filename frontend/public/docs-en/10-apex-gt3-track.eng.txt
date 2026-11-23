@@ -1,0 +1,52 @@
+[CUSTOM-010] APEX GT3 Track
+
+1. Basic Specs of APEX GT3 Track (Metadata & Basic Specs)
+   - Info code: CUSTOM-010
+   - Model: APEX GT3 Track
+   - Brand: APEX Sports
+   - Car type: Track-Focused Street-Legal Racer (race car registered for road use)
+   - Drive system: Naturally Aspirated Flat-6 / Rear-Wheel Drive (RWD)
+   - Seats: 2
+   - Selling price of APEX GT3 Track: 17,500,000 THB
+
+2. Powertrain, Performance & Fuel of APEX GT3 Track
+   - 4.0L naturally aspirated 6-cylinder flat (Flat-6) petrol engine, max 9,000 rpm
+   - Max power 540 hp, max torque 470 Nm
+   - 7-speed close-ratio dual-clutch automatic gearbox, rear-wheel drive (RWD)
+   - 0-100 km/h in 3.1 seconds
+   - Supported fuel: unleaded petrol octane 95 or higher (pure Petrol 95 / high-octane 98-100 for track use recommended), 64-liter fuel tank
+
+3. Key Highlights & Technology of APEX GT3 Track
+   - Giant swan-neck rear wing (Swan-Neck Rear Wing) with a DRS system that opens/closes the wing to reduce air drag
+   - Front double wishbone suspension, race-car technology brought directly to the road car
+   - Extra-lightweight structure with a roll bar behind the front seats and 6-point harnesses
+
+4. Target Audience & Use Case of APEX GT3 Track
+   - Serious track-day drivers who want the fastest lap times on the circuit without any extra modification
+
+5. Considerations & Limitations of APEX GT3 Track
+   - The cabin is lightweight and raw, with much sound-deadening material removed, so engine and tire noise are clearly heard
+   - Not suitable for daily driving or long trips where comfort is needed
+
+6. Stock Status and Remaining Colors of APEX GT3 Track
+   - APEX GT3 Track ready for delivery: 2 left
+   - Colors in stock: Racing White (white, 1 car), Lizard Apex Green (green, 1 car)
+
+7. Financing and Interest Information of APEX GT3 Track
+   - APEX GT3 Track financing limit: up to 75% of car price (max loan 13,125,000 THB / min down payment 25% = 4,375,000 THB)
+   - Interest rate: starts at 2.09% - 2.79% per year (depends on down payment and installment period)
+
+8. Monthly Payment Table for APEX GT3 Track (Price 17,500,000 THB / 25% down = 4,375,000 THB / loan 13,125,000 THB)
+   - APEX GT3 Track 48-month plan (2.09% interest): 296,297 THB/month
+   - APEX GT3 Track 60-month plan (2.44% interest): 245,438 THB/month
+   - APEX GT3 Track 72-month plan (2.79% interest): 212,807 THB/month
+
+9. Warranty of APEX GT3 Track
+   - APEX GT3 Track warranty period: 4 years or 120,000 km (whichever comes first)
+   - APEX GT3 Track coverage: 4.0L Flat-6 engine, 7-speed dual-clutch gearbox, DRS system, double wishbone suspension, and main electronics (under normal use conditions) (excludes tires, brake pads, wear-and-tear fluids, and damage from misuse)
+
+10. Service Schedule of APEX GT3 Track
+   - APEX GT3 Track service interval: every 10,000 km or every 6 months (whichever comes first)
+   - At 1,000 km (APEX GT3 Track): free basic checkup
+   - At 10,000 / 30,000 / 50,000 km (APEX GT3 Track): change race-grade engine oil and oil filter; check suspension mounting points and the brake system
+   - At 20,000 / 40,000 / 60,000 km (APEX GT3 Track): also change dual-clutch transmission oil, high-boiling-point brake fluid, air filter, and do wheel alignment

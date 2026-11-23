@@ -1,0 +1,52 @@
+[CUSTOM-008] APEX X Hyper
+
+1. Basic Specs of APEX X Hyper (Metadata & Basic Specs)
+   - Info code: CUSTOM-008
+   - Model: APEX X Hyper
+   - Brand: APEX Sports
+   - Car type: Flagship V12 Twin-Turbo Hypercar
+   - Drive system: Twin-Turbo V12 / All-Wheel Drive (AWD)
+   - Seats: 2
+   - Selling price of APEX X Hyper: 45,900,000 THB
+
+2. Powertrain, Performance & Fuel of APEX X Hyper
+   - 6.5L twin-turbo V12 petrol engine, mid-mounted, completely hand-built
+   - Max power 980 hp, max torque 1,000 Nm
+   - 8-speed dual-clutch automatic gearbox, full all-wheel drive (AWD)
+   - 0-100 km/h in 2.5 seconds, top speed over 350 km/h
+   - Supported fuel: unleaded petrol octane 95 or higher (pure Petrol 95 / high-octane 98-100 for track use recommended), 85-liter fuel tank
+
+3. Key Highlights & Technology of APEX X Hyper
+   - Full carbon-fiber monocoque body structure (Monofuselage), the strongest and lightest in the brand
+   - Active aerodynamics (Active Aerodynamics) automatically adjust the rear wing angle and air intakes according to speed
+   - Limited global production, with a chassis number plate engraved for each individual car inside the cabin
+
+4. Target Audience & Use Case of APEX X Hyper
+   - Ultra-high-net-worth collectors who want the ultimate V12 internal-combustion power of the APEX Sports brand
+
+5. Considerations & Limitations of APEX X Hyper
+   - Limited production and delivery quota; limited color and option choices in stock
+   - Maintenance and insurance costs are at the highest level in line with the car's value
+
+6. Stock Status and Remaining Colors of APEX X Hyper
+   - APEX X Hyper ready for delivery: 1 left
+   - Colors in stock: Arancio Apex Metallic (orange, 1 car)
+
+7. Financing and Interest Information of APEX X Hyper
+   - APEX X Hyper financing limit: up to 75% of car price (max loan 34,425,000 THB / min down payment 25% = 11,475,000 THB)
+   - Interest rate: starts at 2.09% - 2.79% per year (depends on down payment and installment period)
+
+8. Monthly Payment Table for APEX X Hyper (Price 45,900,000 THB / 25% down = 11,475,000 THB / loan 34,425,000 THB)
+   - APEX X Hyper 48-month plan (2.09% interest): 777,144 THB/month
+   - APEX X Hyper 60-month plan (2.44% interest): 643,748 THB/month
+   - APEX X Hyper 72-month plan (2.79% interest): 558,163 THB/month
+
+9. Warranty of APEX X Hyper
+   - APEX X Hyper warranty period: 4 years or 120,000 km (whichever comes first)
+   - APEX X Hyper coverage: 6.5L twin-turbo V12 engine, 8-speed dual-clutch gearbox, carbon monocoque structure, active aerodynamics system, and main electronics (excludes tires, brake pads, wear-and-tear fluids, and damage from misuse)
+
+10. Service Schedule of APEX X Hyper
+   - APEX X Hyper service interval: every 10,000 km or every 6 months (whichever comes first)
+   - At 1,000 km (APEX X Hyper): free basic checkup
+   - At 10,000 / 30,000 / 50,000 km (APEX X Hyper): full engineering system checkup, change racing-grade engine oil and filter, and diagnostic analysis of the turbo system
+   - At 20,000 / 40,000 / 60,000 km (APEX X Hyper): also change dual-clutch transmission oil, brake fluid, high-pressure cooling system, and adjust the aerodynamic center of gravity

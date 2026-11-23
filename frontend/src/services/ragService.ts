@@ -3,7 +3,8 @@ import { products } from './productService';
 
 const ENV = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
 
-const DOCS_BASE = (ENV?.VITE_DOCS_BASE || 'docs').replace(/\/+$/, '');
+const DOCS_BASE_TH = (ENV?.VITE_DOCS_BASE || 'docs').replace(/\/+$/, '');
+const DOCS_BASE_EN = (ENV?.VITE_DOCS_BASE_EN || 'docs-en').replace(/\/+$/, '');
 
 // Worker URL ไม่ใช่ความลับ (เป็นที่อยู่สาธารณะ ป้องกันด้วย CORS origin check ใน worker.js อยู่แล้ว)
 // กุญแจจริง (Gemini API key) เก็บเป็น Secret บน Cloudflare เท่านั้น
@@ -11,14 +12,22 @@ const DEFAULT_WORKER_URL = 'https://apexdrive-chatbot.ppeerawit789.workers.dev';
 const WORKER_URL = (ENV?.VITE_WORKER_URL || DEFAULT_WORKER_URL).replace(/\/+$/, '');
 const AI_MODEL = ENV?.VITE_AI_MODEL || 'gemini-flash-lite-latest';
 const EMBED_MODEL = 'gemini-embedding-001';
-const VECTORS_FILE = 'vectors.json';
+const VECTORS_FILE_TH = 'vectors.json';
+const VECTORS_FILE_EN = 'vectors-en.json';
+
+/** ตรวจภาษาจากคำถามที่ผู้ใช้พิมพ์จริง: มีอักษรไทย -> 'th', มีอักษรอังกฤษ -> 'en' */
+export function detectQueryLang(question: string, fallback: Language): Language {
+  if (/[\u0E00-\u0E7F]/.test(question)) return 'th';
+  if (/[a-zA-Z]/.test(question)) return 'en';
+  return fallback;
+}
 
 const CHUNK_SIZE = 500;
 const OVERLAP = 100;
 const TOP_K = 6;
 
 // เอกสารความรู้ของโชว์รูม APEX Sports — วางไว้ที่ frontend/public/docs/
-const FILES = [
+const FILES_TH = [
   '01-apex-35-gt.txt',
   '02-apex-4-coupe.txt',
   '03-apex-2-clubsport.txt',
@@ -36,18 +45,35 @@ const FILES = [
   '15-installment-summary.txt',
 ];
 
+const FILES_EN = [
+  '01-apex-35-gt.eng.txt',
+  '02-apex-4-coupe.eng.txt',
+  '03-apex-2-clubsport.eng.txt',
+  '04-apex-86-spirit.eng.txt',
+  '05-apex-5-touring.eng.txt',
+  '06-apex-8-vantage.eng.txt',
+  '07-apex-10-evo.eng.txt',
+  '08-apex-x-hyper.eng.txt',
+  '09-apex-suv-rs.eng.txt',
+  '10-apex-gt3-track.eng.txt',
+  '11-booking-and-financing.eng.txt',
+  '12-contact-and-faq.eng.txt',
+  '13-catalog-summary.eng.txt',
+  '14-test-drive-and-warranty.eng.txt',
+];
+
 // คำสำคัญเฉพาะรุ่นสำหรับ Hybrid Search (เพิ่มคะแนนให้ไฟล์ตรงรุ่นเมื่อถามสั้นๆ)
-const MODEL_HINTS: Array<{ file: string; keywords: string[] }> = [
-  { file: '01-apex-35-gt.txt', keywords: ['35 gt', '35gt', 'custom-001'] },
-  { file: '02-apex-4-coupe.txt', keywords: ['4 coupe', '4coupe', 'custom-002'] },
-  { file: '03-apex-2-clubsport.txt', keywords: ['2 clubsport', 'clubsport', 'custom-003'] },
-  { file: '04-apex-86-spirit.txt', keywords: ['86 spirit', '86', 'spirit', 'custom-004'] },
-  { file: '05-apex-5-touring.txt', keywords: ['5 touring', 'touring', 'แวกอน', 'wagon', 'custom-005'] },
-  { file: '06-apex-8-vantage.txt', keywords: ['8 vantage', 'vantage', 'custom-006'] },
-  { file: '07-apex-10-evo.txt', keywords: ['10 evo', 'evo', 'v10', 'custom-007'] },
-  { file: '08-apex-x-hyper.txt', keywords: ['x hyper', 'hyper', 'v12', 'custom-008'] },
-  { file: '09-apex-suv-rs.txt', keywords: ['suv rs', 'suv', 'เอสยูวี', 'custom-009'] },
-  { file: '10-apex-gt3-track.txt', keywords: ['gt3', 'track', 'custom-010'] },
+const MODEL_HINTS: Array<{ prefix: string; keywords: string[] }> = [
+  { prefix: '01-apex-35-gt', keywords: ['35 gt', '35gt', 'custom-001'] },
+  { prefix: '02-apex-4-coupe', keywords: ['4 coupe', '4coupe', 'custom-002'] },
+  { prefix: '03-apex-2-clubsport', keywords: ['2 clubsport', 'clubsport', 'custom-003'] },
+  { prefix: '04-apex-86-spirit', keywords: ['86 spirit', '86', 'spirit', 'custom-004'] },
+  { prefix: '05-apex-5-touring', keywords: ['5 touring', 'touring', 'แวกอน', 'wagon', 'custom-005'] },
+  { prefix: '06-apex-8-vantage', keywords: ['8 vantage', 'vantage', 'custom-006'] },
+  { prefix: '07-apex-10-evo', keywords: ['10 evo', 'evo', 'v10', 'custom-007'] },
+  { prefix: '08-apex-x-hyper', keywords: ['x hyper', 'hyper', 'v12', 'custom-008'] },
+  { prefix: '09-apex-suv-rs', keywords: ['suv rs', 'suv', 'เอสยูวี', 'custom-009'] },
+  { prefix: '10-apex-gt3-track', keywords: ['gt3', 'track', 'custom-010'] },
 ];
 
 export interface HistoryTurn {
@@ -70,14 +96,16 @@ interface Grams {
   norm: number;
 }
 
-let chunksPromise: Promise<Chunk[]> | null = null;
+const chunksCache: Record<Language, Promise<Chunk[]> | null> = { th: null, en: null };
 
-async function loadChunks(): Promise<Chunk[]> {
-  if (!chunksPromise) {
-    chunksPromise = (async () => {
+async function loadChunks(docLang: Language): Promise<Chunk[]> {
+  if (!chunksCache[docLang]) {
+    const base = docLang === 'en' ? DOCS_BASE_EN : DOCS_BASE_TH;
+    const files = docLang === 'en' ? FILES_EN : FILES_TH;
+    chunksCache[docLang] = (async () => {
       const out: Chunk[] = [];
-      for (const file of FILES) {
-        const res = await fetch(`${DOCS_BASE}/${file}`);
+      for (const file of files) {
+        const res = await fetch(`${base}/${file}`);
         if (!res.ok) continue;
         const text = (await res.text()).trim();
         let start = 0;
@@ -91,7 +119,7 @@ async function loadChunks(): Promise<Chunk[]> {
       return out;
     })();
   }
-  return chunksPromise;
+  return chunksCache[docLang]!;
 }
 
 // นับชุดตัวอักษรสามตัวติดกัน เหมาะกับภาษาไทยเพราะไม่ต้องตัดคำก่อน
@@ -119,15 +147,15 @@ function similarity(a: Grams, b: Grams): number {
 
 function keywordBoost(queryLower: string, source: string): number {
   for (const hint of MODEL_HINTS) {
-    if (hint.file === source && hint.keywords.some(k => queryLower.includes(k))) {
+    if (source.startsWith(hint.prefix) && hint.keywords.some(k => queryLower.includes(k))) {
       return 0.15;
     }
   }
   return 0;
 }
 
-async function searchChunksLocal(searchQuery: string): Promise<ScoredChunk[]> {
-  const chunks = await loadChunks();
+async function searchChunksLocal(searchQuery: string, docLang: Language): Promise<ScoredChunk[]> {
+  const chunks = await loadChunks(docLang);
   const q = grams(searchQuery);
   const qLower = searchQuery.toLowerCase();
   return chunks
@@ -139,7 +167,7 @@ async function searchChunksLocal(searchQuery: string): Promise<ScoredChunk[]> {
     .slice(0, TOP_K);
 }
 
-// ---------- โหมด vector (ค้นด้วยความหมาย ใช้ vectors.json ที่สร้างไว้ล่วงหน้า) ----------
+// ---------- โหมด vector (ค้นด้วยความหมาย ใช้ vectors.json / vectors-en.json ที่สร้างไว้ล่วงหน้า) ----------
 
 interface VectorChunk extends Chunk {
   v: number[];
@@ -151,13 +179,14 @@ interface VectorsFile {
   chunks: VectorChunk[];
 }
 
-let vectorsPromise: Promise<VectorsFile | null> | null = null;
+const vectorsCache: Record<Language, Promise<VectorsFile | null> | null> = { th: null, en: null };
 
-async function loadVectors(): Promise<VectorsFile | null> {
-  if (!vectorsPromise) {
-    vectorsPromise = (async () => {
+async function loadVectors(docLang: Language): Promise<VectorsFile | null> {
+  if (!vectorsCache[docLang]) {
+    const file = docLang === 'en' ? VECTORS_FILE_EN : VECTORS_FILE_TH;
+    vectorsCache[docLang] = (async () => {
       try {
-        const res = await fetch(VECTORS_FILE);
+        const res = await fetch(file);
         if (!res.ok) return null;
         const data = await res.json();
         if (!data.chunks || !data.chunks.length) return null;
@@ -167,7 +196,7 @@ async function loadVectors(): Promise<VectorsFile | null> {
       }
     })();
   }
-  return vectorsPromise;
+  return vectorsCache[docLang]!;
 }
 
 async function embedQuestion(question: string, dim: number): Promise<number[]> {
@@ -189,11 +218,12 @@ async function embedQuestion(question: string, dim: number): Promise<number[]> {
 
 /** ลองค้นด้วยเวกเตอร์ก่อน (Hybrid: Vector + Keyword Boost) ถ้าไม่สำเร็จให้ถอยไปค้นแบบ n-gram แทน */
 async function searchBestChunks(
-  searchQuery: string
+  searchQuery: string,
+  docLang: Language
 ): Promise<{ found: ScoredChunk[]; mode: 'vector' | 'local' }> {
-  const vectors = await loadVectors();
+  const vectors = await loadVectors(docLang);
   if (!vectors) {
-    return { found: await searchChunksLocal(searchQuery), mode: 'local' };
+    return { found: await searchChunksLocal(searchQuery, docLang), mode: 'local' };
   }
 
   try {
@@ -214,7 +244,7 @@ async function searchBestChunks(
     return { found, mode: 'vector' };
   } catch (e) {
     console.warn('ค้นด้วยเวกเตอร์ไม่สำเร็จ ถอยไปใช้การเทียบตัวอักษรแทน:', e);
-    return { found: await searchChunksLocal(searchQuery), mode: 'local' };
+    return { found: await searchChunksLocal(searchQuery, docLang), mode: 'local' };
   }
 }
 
@@ -298,15 +328,16 @@ export async function askRag(
 ): Promise<RagResult | null> {
   if (!WORKER_URL) return null;
 
+  const replyLang = detectQueryLang(question, lang);
   const searchQuery = buildSearchQuery(question, history);
-  const { found, mode } = await searchBestChunks(searchQuery);
+  const { found, mode } = await searchBestChunks(searchQuery, replyLang);
   if (!found.length) return null;
 
   const res = await fetch(`${WORKER_URL}/v1beta/models/${AI_MODEL}:generateContent`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: buildPrompt(question, found, lang, history) }] }],
+      contents: [{ parts: [{ text: buildPrompt(question, found, replyLang, history) }] }],
       generationConfig: {
         temperature: 0.2,
         maxOutputTokens: 1024,
@@ -335,7 +366,7 @@ export async function askRag(
     seenFiles.add(f.source);
     const pct = Math.min(99, Math.round(f.score * 100));
     citations.push(
-      lang === 'en'
+      replyLang === 'en'
         ? `${f.source} (part ${f.part} · ${pct}%)`
         : `${f.source} (ส่วนที่ ${f.part} · ${pct}%)`
     );

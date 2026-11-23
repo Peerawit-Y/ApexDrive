@@ -1,0 +1,52 @@
+[CUSTOM-003] APEX 2 Clubsport
+
+1. Basic Specs of APEX 2 Clubsport (Metadata & Basic Specs)
+   - Info code: CUSTOM-003
+   - Model: APEX 2 Clubsport
+   - Brand: APEX Sports
+   - Car type: Compact Rear-Wheel Drive Sports Coupe
+   - Drive system: Twin-Turbo Inline-6 / Rear-Wheel Drive (RWD)
+   - Seats: 4 (2+2)
+   - Selling price of APEX 2 Clubsport: 5,690,000 THB
+
+2. Powertrain, Performance & Fuel of APEX 2 Clubsport
+   - 3.0L twin-turbo inline-6 (Inline-6) petrol engine
+   - Max power 480 hp, max torque 600 Nm
+   - 6-speed manual or 8-speed sport automatic gearbox, rear-wheel drive (RWD) with M-Spec LSD
+   - 0-100 km/h in 3.9 seconds
+   - Supported fuel: unleaded petrol octane 95 or higher (Petrol 95 / Gasohol 95 recommended), 52-liter fuel tank
+
+3. Key Highlights & Technology of APEX 2 Clubsport
+   - Short, wide wheelbase gives the highest agility in the coupe family, easy to control and fun in every corner
+   - 50:50 front-rear weight balance with Adaptive suspension adjustable in 3 damping levels
+   - Wide, aggressive touring-race style fenders with a sport exhaust with variable valves
+
+4. Target Audience & Use Case of APEX 2 Clubsport
+   - Younger drivers and fans of compact high-power sports cars, fun on daily roads and on track days
+
+5. Considerations & Limitations of APEX 2 Clubsport
+   - Rear legroom is fairly tight, suitable for small passengers or luggage
+   - The 52-liter tank means stopping to refuel more often when driving at high speed continuously
+
+6. Stock Status and Remaining Colors of APEX 2 Clubsport
+   - APEX 2 Clubsport ready for delivery: 6 left
+   - Colors in stock: Zandvoort Apex Blue (blue, 2 cars), Toronto Apex Red (red, 2 cars), Sapphire Black (black, 2 cars)
+
+7. Financing and Interest Information of APEX 2 Clubsport
+   - APEX 2 Clubsport financing limit: up to 75% of car price (max loan 4,267,500 THB / min down payment 25% = 1,422,500 THB)
+   - Interest rate: starts at 2.09% - 2.79% per year (depends on down payment and installment period)
+
+8. Monthly Payment Table for APEX 2 Clubsport (Price 5,690,000 THB / 25% down = 1,422,500 THB / loan 4,267,500 THB)
+   - APEX 2 Clubsport 48-month plan (2.09% interest): 96,339 THB/month
+   - APEX 2 Clubsport 60-month plan (2.44% interest): 79,802 THB/month
+   - APEX 2 Clubsport 72-month plan (2.79% interest): 69,193 THB/month
+
+9. Warranty of APEX 2 Clubsport
+   - APEX 2 Clubsport warranty period: 4 years or 120,000 km (whichever comes first)
+   - APEX 2 Clubsport coverage: Twin-Turbo Inline-6 engine, transmission system, limited-slip differential, Adaptive suspension, and main electronics (excludes tires, brake pads, wear-and-tear fluids, and damage from misuse)
+
+10. Service Schedule of APEX 2 Clubsport
+   - APEX 2 Clubsport service interval: every 10,000 km or every 6 months (whichever comes first)
+   - At 1,000 km (APEX 2 Clubsport): free basic checkup
+   - At 10,000 / 30,000 / 50,000 km (APEX 2 Clubsport): change engine oil and oil filter; check the brake system and suspension
+   - At 20,000 / 40,000 / 60,000 km (APEX 2 Clubsport): also change brake fluid and air filter; check the cooling system and differential

@@ -1,0 +1,52 @@
+[CUSTOM-002] APEX 4 Coupe
+
+1. Basic Specs of APEX 4 Coupe (Metadata & Basic Specs)
+   - Info code: CUSTOM-002
+   - Model: APEX 4 Coupe
+   - Brand: APEX Sports
+   - Car type: Lightweight Sports Coupe
+   - Drive system: Twin-Turbo Inline-6 / Rear-Wheel Drive (RWD)
+   - Seats: 2
+   - Selling price of APEX 4 Coupe: 7,450,000 THB
+
+2. Powertrain, Performance & Fuel of APEX 4 Coupe
+   - Specially tuned 3.0L twin-turbo inline-6 (Inline-6) petrol engine
+   - Max power 560 hp, max torque 650 Nm
+   - 8-speed sport automatic gearbox, rear-wheel drive (RWD) with electronically controlled limited-slip differential
+   - 0-100 km/h in 3.5 seconds
+   - Supported fuel: unleaded petrol octane 95 or higher (Petrol 95 / premium Gasohol 95 recommended), 59-liter fuel tank
+
+3. Key Highlights & Technology of APEX 4 Coupe
+   - Built around weight reduction: carbon-fiber materials, rear seats removed, and full bucket seats in front, cutting weight by more than 100 kg
+   - Steering communicates the road precisely and is highly agile in corners
+   - Comes with a drift control mode and a traction control system adjustable in 10 steps
+
+4. Target Audience & Use Case of APEX 4 Coupe
+   - Skilled drivers who love a raw driving feel and enjoy controlling the rear end of the car on a track
+
+5. Considerations & Limitations of APEX 4 Coupe
+   - The suspension is tuned stiff for track driving and may not be smooth on rough city roads or potholes
+   - The cabin has only 2 seats and cannot carry multiple passengers
+
+6. Stock Status and Remaining Colors of APEX 4 Coupe
+   - APEX 4 Coupe ready for delivery: 5 left
+   - Colors in stock: Alpine White (white, 2 cars), APEX Cobalt Blue (blue, 2 cars), Nardo Matte Grey (grey, 1 car)
+
+7. Financing and Interest Information of APEX 4 Coupe
+   - APEX 4 Coupe financing limit: up to 75% of car price (max loan 5,587,500 THB / min down payment 25% = 1,862,500 THB)
+   - Interest rate: starts at 2.09% - 2.79% per year (depends on down payment and installment period)
+
+8. Monthly Payment Table for APEX 4 Coupe (Price 7,450,000 THB / 25% down = 1,862,500 THB / loan 5,587,500 THB)
+   - APEX 4 Coupe 48-month plan (2.09% interest): 126,138 THB/month
+   - APEX 4 Coupe 60-month plan (2.44% interest): 104,486 THB/month
+   - APEX 4 Coupe 72-month plan (2.79% interest): 90,595 THB/month
+
+9. Warranty of APEX 4 Coupe
+   - APEX 4 Coupe warranty period: 4 years or 120,000 km (whichever comes first)
+   - APEX 4 Coupe coverage: Twin-Turbo Inline-6 engine, 8-speed sport automatic gearbox, limited-slip differential, suspension system, factory-installed weight-saving/carbon-fiber parts, and main electronics (excludes tires, brake pads, wear-and-tear fluids, and damage from misuse)
+
+10. Service Schedule of APEX 4 Coupe
+   - APEX 4 Coupe service interval: every 10,000 km or every 6 months (whichever comes first)
+   - At 1,000 km (APEX 4 Coupe): free basic checkup
+   - At 10,000 / 30,000 / 50,000 km (APEX 4 Coupe): change engine oil and oil filter; check brakes, suspension, and seat/structure mounting points
+   - At 20,000 / 40,000 / 60,000 km (APEX 4 Coupe): also change brake fluid and air filter; check the cooling system and differential
