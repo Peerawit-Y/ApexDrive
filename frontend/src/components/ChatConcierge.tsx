@@ -333,7 +333,7 @@ export const ChatConcierge: React.FC = () => {
                         </span>
                       )}
                       <span>
-                        {t('อ้างอิง:', 'Source:')} {msg.citations.join(' · ')}
+                        {/[\u0E00-\u0E7F]/.test(msg.text) ? 'อ้างอิง:' : 'Source:'} {msg.citations.join(' · ')}
                       </span>
                     </div>
                   )}

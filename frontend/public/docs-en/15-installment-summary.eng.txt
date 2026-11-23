@@ -1,0 +1,53 @@
+Monthly installment summary table for all 10 APEX Sports cars (ordered from lowest to highest price)
+Same terms for all models: minimum 25% down payment of the car price, maximum 75% financing.
+Interest rates: 48 months (4 years) 2.09% per year / 60 months (5 years) 2.44% per year / 72 months (6 years) 2.79% per year.
+
+1. APEX 86 Spirit (Price 2,990,000 THB / down payment 747,500 THB / loan 2,242,500 THB)
+   - 48-month plan: 50,624 THB/month
+   - 60-month plan: 41,935 THB/month
+   - 72-month plan: 36,360 THB/month
+
+2. APEX 2 Clubsport (Price 5,690,000 THB / down payment 1,422,500 THB / loan 4,267,500 THB)
+   - 48-month plan: 96,339 THB/month
+   - 60-month plan: 79,802 THB/month
+   - 72-month plan: 69,193 THB/month
+
+3. APEX 4 Coupe (Price 7,450,000 THB / down payment 1,862,500 THB / loan 5,587,500 THB)
+   - 48-month plan: 126,138 THB/month
+   - 60-month plan: 104,486 THB/month
+   - 72-month plan: 90,595 THB/month
+
+4. APEX 35 GT (Price 11,900,000 THB / down payment 2,975,000 THB / loan 8,925,000 THB)
+   - 48-month plan: 201,482 THB/month
+   - 60-month plan: 166,898 THB/month
+   - 72-month plan: 144,709 THB/month
+
+5. APEX 5 Touring (Price 12,800,000 THB / down payment 3,200,000 THB / loan 9,600,000 THB)
+   - 48-month plan: 216,720 THB/month
+   - 60-month plan: 179,520 THB/month
+   - 72-month plan: 155,653 THB/month
+
+6. APEX SUV RS (Price 14,900,000 THB / down payment 3,725,000 THB / loan 11,175,000 THB)
+   - 48-month plan: 252,276 THB/month
+   - 60-month plan: 208,972 THB/month
+   - 72-month plan: 181,190 THB/month
+
+7. APEX 8 Vantage (Price 15,900,000 THB / down payment 3,975,000 THB / loan 11,925,000 THB)
+   - 48-month plan: 269,207 THB/month
+   - 60-month plan: 222,998 THB/month
+   - 72-month plan: 193,351 THB/month
+
+8. APEX GT3 Track (Price 17,500,000 THB / down payment 4,375,000 THB / loan 13,125,000 THB)
+   - 48-month plan: 296,297 THB/month
+   - 60-month plan: 245,438 THB/month
+   - 72-month plan: 212,807 THB/month
+
+9. APEX 10 Evo (Price 19,800,000 THB / down payment 4,950,000 THB / loan 14,850,000 THB)
+   - 48-month plan: 335,239 THB/month
+   - 60-month plan: 277,695 THB/month
+   - 72-month plan: 240,776 THB/month
+
+10. APEX X Hyper (Price 45,900,000 THB / down payment 11,475,000 THB / loan 34,425,000 THB)
+    - 48-month plan: 777,144 THB/month
+    - 60-month plan: 643,748 THB/month
+    - 72-month plan: 558,163 THB/month

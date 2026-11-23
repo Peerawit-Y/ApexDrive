@@ -60,9 +60,10 @@ const FILES_EN = [
   '12-contact-and-faq.eng.txt',
   '13-catalog-summary.eng.txt',
   '14-test-drive-and-warranty.eng.txt',
+  '15-installment-summary.eng.txt',
 ];
 
-// คำสำคัญเฉพาะรุ่นสำหรับ Hybrid Search (เพิ่มคะแนนให้ไฟล์ตรงรุ่นเมื่อถามสั้นๆ)
+// คำสำคัญเฉพาะรุ่นและไฟล์สรุปสำหรับ Hybrid Search (เพิ่มคะแนนให้ไฟล์ตรงเรื่องเมื่อถามสั้นๆ)
 const MODEL_HINTS: Array<{ prefix: string; keywords: string[] }> = [
   { prefix: '01-apex-35-gt', keywords: ['35 gt', '35gt', 'custom-001'] },
   { prefix: '02-apex-4-coupe', keywords: ['4 coupe', '4coupe', 'custom-002'] },
@@ -74,6 +75,8 @@ const MODEL_HINTS: Array<{ prefix: string; keywords: string[] }> = [
   { prefix: '08-apex-x-hyper', keywords: ['x hyper', 'hyper', 'v12', 'custom-008'] },
   { prefix: '09-apex-suv-rs', keywords: ['suv rs', 'suv', 'เอสยูวี', 'custom-009'] },
   { prefix: '10-apex-gt3-track', keywords: ['gt3', 'track', 'custom-010'] },
+  { prefix: '15-installment-summary', keywords: ['installment', 'monthly payment', 'payment schedule', 'payment table', 'ตารางผ่อน', 'ผ่อนทั้งหมด', 'ผ่อนทุกรุ่น'] },
+  { prefix: '13-catalog-summary', keywords: ['all models', '10 models', 'cheapest', 'most expensive', 'highest horsepower', 'ทุกรุ่น', '10 รุ่น', 'ถูกสุด', 'แพงสุด', 'แรงม้ามากที่สุด'] },
 ];
 
 export interface HistoryTurn {
@@ -289,7 +292,8 @@ function buildPrompt(
   if (lang === 'en') {
     return `You are the ApexDrive Private Concierge for the APEX Sports showroom.
 Answer using ONLY the documents below.
-If the documents do not contain the answer, say you do not have that information in the showroom documents and suggest contacting our staff at 02-XXX-XXXX or 089-XXX-XXXX.
+If the user asks for a condition or option that is not offered (for example, a 10-month installment plan when only 48, 60, and 72-month plans exist, or asks "10-Month Installment Schedule" meaning all 10 models' monthly installment schedules), politely clarify what is available in the documents and provide the relevant figures from the documents.
+If the documents truly do not contain any related information at all, say you do not have that information in the showroom documents and suggest contacting our staff at 02-XXX-XXXX or 089-XXX-XXXX.
 Do not guess and do not add facts from general knowledge.
 Give a complete, clear, polite answer in English (plain text without markdown asterisks).
 ${historyBlock}
@@ -302,7 +306,8 @@ ${question}`;
 
   return `คุณคือ ApexDrive Private Concierge ผู้ช่วยตอบคำถามของโชว์รูม APEX Sports
 ให้ตอบโดยใช้เฉพาะข้อมูลในเอกสารด้านล่างเท่านั้น
-ถ้าเอกสารไม่มีคำตอบ ให้ตอบว่าไม่พบข้อมูลนี้ในเอกสารของโชว์รูม และแนะนำให้ติดต่อเจ้าหน้าที่ โทร 02-XXX-XXXX หรือ 089-XXX-XXXX
+หากผู้ใช้ถามเงื่อนไขที่ไม่มีในโชว์รูม (เช่น ถามจำนวนงวดผ่อนที่ไม่มีในเอกสาร) ให้ชี้แจงอย่างสุภาพว่าไม่มีเงื่อนไขนั้น แล้วแสดงข้อมูลหรือเงื่อนไขที่โชว์รูมมีในเอกสารแทน (เช่น แสดงโปรแกรมผ่อน 48, 60 และ 72 งวดที่มีในเอกสาร)
+ถ้าเป็นเรื่องที่ไม่มีข้อมูลเกี่ยวข้องในเอกสารเลยจริงๆ ให้ตอบว่าไม่พบข้อมูลนี้ในเอกสารของโชว์รูม และแนะนำให้ติดต่อเจ้าหน้าที่ โทร 02-XXX-XXXX หรือ 089-XXX-XXXX
 ห้ามเดา ห้ามเติมข้อมูลจากความรู้ทั่วไป
 ตอบเป็นภาษาไทยให้ครบถ้วน ชัดเจน กระชับ สุภาพ (ไม่ต้องใช้เครื่องหมาย ** Markdown)
 ${historyBlock}
